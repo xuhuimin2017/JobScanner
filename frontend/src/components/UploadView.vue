@@ -34,7 +34,11 @@
           class="full-width full-height row flex-center"
         >
           <div class="row items-center q-gutter-sm">
-            <div><q-btn :disable="error.upload" class="style-widget" round unelevated dense icon="pause"></q-btn></div>
+            <div><q-btn
+              :disable="error.upload !== ''"
+              class="style-widget"
+              round unelevated dense icon="pause">
+            </q-btn></div>
             <div><q-circular-progress
               reverse
               :value="uploadPercentage"
@@ -179,7 +183,7 @@ export default class UploadView extends Vue {
   position: relative;
   bottom: 12em;
   width: 25em;
-  height: 14em;
+  min-height: 14em;
   border-radius: 1.5em;
   box-shadow: 0px 5px 20px 2px #c3c3c34d;
 }
