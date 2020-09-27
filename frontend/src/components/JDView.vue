@@ -117,7 +117,7 @@ export default class JDView extends Vue {
 <style lang="scss" scoped>
 .list-container {
   width: 70vw;
-  max-width: 50em;
+  max-width: 64em;
   border-radius: 1.75em;
   box-shadow: 0px 13px 20px 2px #c3c3c34d;
   border-width: 0;

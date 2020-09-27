@@ -8,7 +8,7 @@
         <q-item-label header>Top recommendations</q-item-label>
 
         <div v-for="(job, idx) in jobDataList" :key="idx">
-          <q-item clickable>
+          <q-item clickable @click="cmdSelect(idx)">
             <q-item-section avatar>
               <q-avatar rounded color="secondary">
                 {{ getNamedIcon(job) }}
@@ -35,7 +35,11 @@
 
             <q-item-section top side>
               <div class="text-grey-8 q-gutter-xs">
-                <q-btn class="gt-xs" size="12px" flat dense round icon="mdi-star-outline" />
+                <q-btn
+                  class="gt-xs" size="12px" flat dense round icon="mdi-star-outline"
+                  disable
+                  @click.stop=""
+                />
               </div>
             </q-item-section>
           </q-item>
@@ -70,6 +74,10 @@ export default class ListingView extends Vue {
 
   getDescription(job: JobData) {
     return formatDescription(job)
+  }
+
+  cmdSelect(idx) {
+    this.$emit('select', idx)
   }
 }
 </script>

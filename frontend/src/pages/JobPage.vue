@@ -1,7 +1,13 @@
 <template>
   <q-page class="column items-center">
-    <listing-view :job-data-list="rcmJobList"></listing-view>
-    <JDView :job-data="rcmJobList[1]"></JDView>
+    <listing-view
+      :job-data-list="rcmJobList"
+      @select="onSelectJob">
+    </listing-view>
+    <JDView
+      v-if="currentPreviewJdIdx !== null"
+      :job-data="rcmJobList[currentPreviewJdIdx]">
+    </JDView>
   </q-page>
 </template>
 
@@ -17,8 +23,14 @@ import sampleList from 'components/sample.json'
   components: { ListingView, JDView }
 })
 export default class UploadPage extends Vue {
+  currentPreviewJdIdx: number | null = null
+
   get rcmJobList() {
     return sampleList
+  }
+  onSelectJob(idx) {
+    // console.log(idx)
+    this.currentPreviewJdIdx = idx
   }
 }
 </script>
