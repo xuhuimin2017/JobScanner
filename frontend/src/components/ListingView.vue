@@ -1,13 +1,13 @@
 <template>
   <div class="column items-center">
-    <q-card flat bordered class="q-ma-lg q-py-sm list-container">
+    <q-card bordered class="q-ma-lg q-py-sm list-container">
       <div class="q-pa-md text-h6 text-primary">
         Hey, we might have found some jobs you may fit in!
       </div>
       <q-list bordered class="rounded-borders">
         <q-item-label header>Top recommendations</q-item-label>
 
-        <div v-for="(job, idx) in listData" :key="idx">
+        <div v-for="(job, idx) in jobDataList" :key="idx">
           <q-item clickable>
             <q-item-section avatar>
               <q-avatar rounded color="secondary">
@@ -27,7 +27,7 @@
                 <span class="text-weight-medium">{{ job.name }}</span>
                 <span class="text-grey-8"> - {{ job.type }}</span>
               </q-item-label>
-              <q-item-label caption lines="2">{{ formatDescription(job) }}</q-item-label>
+              <q-item-label caption lines="2">{{ getDescription(job) }}</q-item-label>
               <q-item-label lines="1">
                 <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills">{{ s }}</q-badge>
               </q-item-label>
@@ -40,7 +40,8 @@
             </q-item-section>
           </q-item>
 
-          <q-separator v-if="idx !== listData.length - 1" spaced />
+          <!-- Not showing the separator for the last one -->
+          <q-separator v-if="idx !== jobDataList.length - 1" spaced />
         </div>
 
       </q-list>
@@ -53,20 +54,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
-import sampleList from './sample.json'
+import {Vue, Component, Prop} from 'vue-property-decorator'
+import {JobData} from "components/models";
+import {formatDescription, getNamedIcon} from "components/processing";
+// import sampleList from './sample.json'
 // console.log(sampleList)
 
 @Component
 export default class ListingView extends Vue {
-  listData = sampleList
+  @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
 
-  getNamedIcon(job: any) {
-    return job.company?.trim().substr(0, 1)
+  getNamedIcon(job: JobData) {
+    return getNamedIcon(job)
   }
 
-  formatDescription(job: any) {
-    return typeof job.description === 'object' ? job.description.join(' ') : job.description
+  getDescription(job: JobData) {
+    return formatDescription(job)
   }
 }
 </script>
@@ -76,5 +79,6 @@ export default class ListingView extends Vue {
   width: 70vw;
   max-width: 50em;
   border-radius: 1.75em;
+  box-shadow: 0px 13px 20px 2px #c3c3c34d;
 }
 </style>
