@@ -1,0 +1,141 @@
+[
+  {
+    "name": "Predictive Analytics for SAP PAL",
+    "pricing_model": "hourly",
+    "company": " KB Solutions",
+    "company_url": "http://www.kbsapsolutions.com",
+    "location": " Tel Aviv, Tel Aviv, Israel",
+    "type": " Remote job",
+    "created_at": " May 20",
+    "description": "Extensive knowledge in predictive analytics for SAP PAL. We need to format a solution in SAP using Predictive Analysis Technology. The use of procedures in the AMDP class is strongly recommended.",
+    "skills": [
+      "Data Science"
+    ],
+    "availability": [
+      "Hourly contract"
+    ],
+    "experience_levels": [
+      "Intermediate (3 - 5 yrs), Expert (5+ yrs)"
+    ],
+    "languages": [
+      "English, Portuguese"
+    ],
+    "pay_rate": "Negotiable rate"
+  },
+  {
+    "name": "Virtual Assistant",
+    "pricing_model": "hourly",
+    "company": " Mealheroes",
+    "company_url": "http://www.mealheroes.de",
+    "location": " Berlin, Berlin, Germany",
+    "type": " Remote job",
+    "created_at": " Jun  1",
+    "description": [
+      "We are a young food startup.",
+      "Currently, we search for business tasks and for private tasks someone who can help us with Research, Word Formatting, Data Entries, and Power Point presentations."
+    ],
+    "skills": [
+      "Presentation Design",
+      "Research",
+      "Word",
+      "Online Research",
+      "Data Entry"
+    ],
+    "availability": [
+      "Hourly contract"
+    ],
+    "experience_levels": [],
+    "languages": [],
+    "pay_rate": "$3/hr"
+  },
+  {
+    "name": "Part Time Social Media Manager",
+    "pricing_model": "hourly",
+    "company": " 3R Industries, Inc ",
+    "company_url": "http://3rteachertraining.com",
+    "location": " Brewster, New York, United States",
+    "type": " Remote job",
+    "created_at": " Jun  9",
+    "description": [
+      "We are looking for someone to create and schedule social media posts to FB, TW, LI, and IG through our AgoraPulse account. We would provide scheduling requirements and times of course.",
+      "NECESSARY Skills:",
+      "PREFERRED SKILLS",
+      "Please provide the references with email contact information.",
+      "For the first part of your reply, please type \"3RSocial\" so that we can prioritize those who we know have read the entire posting."
+    ],
+    "skills": [
+      "Canva",
+      "Online Research",
+      "Social Media Management"
+    ],
+    "availability": [
+      "Hourly contract"
+    ],
+    "experience_levels": [
+      "Intermediate (3 - 5 yrs)"
+    ],
+    "languages": [
+      "English"
+    ],
+    "pay_rate": "Negotiable rate"
+  },
+  {
+    "name": "Editing, inserting graphics, prepare article for submission",
+    "pricing_model": "hourly",
+    "company": " Concierge Fitness",
+    "company_url": "https://www.facebook.com/john.schwenker",
+    "location": " Niagara Falls, Ontario, Canada",
+    "type": " Remote job",
+    "created_at": " Jun 17",
+    "description": "I am a fitness writer. I love writing my first draft, and going through it once. Then I am done with it. I am submitting articles to fitness magazines and need them to be edited, proofread, graphics created and inserted, insert unique photos and videos into the article (provided) and have it ready to be submitted to editor.",
+    "skills": [
+      "Word",
+      "Data Visualization",
+      "Storytelling",
+      "Social Media Management"
+    ],
+    "availability": [
+      "Hourly contract"
+    ],
+    "experience_levels": [],
+    "languages": [
+      "English"
+    ],
+    "pay_rate": "Negotiable rate"
+  },
+  {
+    "name": "Virtual Assistant",
+    "pricing_model": "full time",
+    "company": " Product Equities",
+    "company_url": "http://productequities.com",
+    "location": " Forest Hills, NY, United States",
+    "type": " Remote job",
+    "created_at": " Jun 11",
+    "description": [
+      "Seeking detail oriented virtual assistant for fast-paced international digital marketing agency.",
+      "Must have comprehensive experience with Google Sheets.",
+      "Tasks include:",
+      "Research",
+      "Data mining",
+      "Data analysis",
+      "Organization"
+    ],
+    "skills": [
+      "Data Collection",
+      "Google Sheets",
+      "Online Research",
+      "Data Management",
+      "Data Entry"
+    ],
+    "availability": [
+      "Full-time (40 hrs/wk)"
+    ],
+    "experience_levels": [
+      "Beginner (1 - 3 yrs)"
+    ],
+    "languages": [
+      "English"
+    ],
+    "pay_rate": "Negotiable rate"
+  }
+]

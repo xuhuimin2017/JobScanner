@@ -1,0 +1,9 @@
+scipy
+numpy
+seaborn
+pandas
+gensim
+matplotlib
+statsmodels
+
+pdfminer
