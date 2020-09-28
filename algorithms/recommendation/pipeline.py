@@ -1,7 +1,9 @@
 import re
 import json
 import time
+from pathlib import Path
 from pprint import pprint
+from typing import Dict
 
 import numpy as np
 import pandas as pd
@@ -9,10 +11,15 @@ import gensim
 import pdfminer.high_level
 from gensim.models.doc2vec import Doc2Vec, LabeledSentence
 
+_path_cur = Path(__file__).absolute().resolve().parent
+_path_w2vbin = _path_cur / 'GoogleNews-vectors-negative300.bin'
+_path_hoff_profile = _path_cur / 'hubstaff_profiles.json'
+_path_hoff_desc = _path_cur / './hubstaff_job_descriptions.json'
+
 print('Data preparing...')
 time_start = time.time()
 # Load Google's pre-trained Word2Vec model.
-model = gensim.models.KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin', binary=True)
+model = gensim.models.KeyedVectors.load_word2vec_format(str(_path_w2vbin), binary=True)
 
 
 def skill(x):
@@ -28,12 +35,12 @@ def skill(x):
         return list(np.mean(b, axis=0))
 
 
-with open("./hubstaff_profiles.json") as fp:  # speciality,skills,pay_rate
+with open(str(_path_hoff_profile)) as fp:  # speciality,skills,pay_rate
     profile = json.load(fp)
 
 skill_dict = [j.lower() for i in profile for j in i['skills']]
 
-with open("./hubstaff_job_descriptions.json") as fp:  # complete
+with open(str(_path_hoff_desc)) as fp:  # complete
     job_des = json.load(fp)
 
 skill_dict1 = [j.lower() for i in job_des for j in i['skills']]
@@ -70,7 +77,7 @@ def cv_from_text(txt_file):
     return text
 
 
-def get_job_recommendations(cv_text: str, top=5):
+def get_job_recommendations(cv_text: str, top=5) -> Dict:
     if not cv_text:
         raise ValueError('cv text not valid')
 

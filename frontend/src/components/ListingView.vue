@@ -1,10 +1,18 @@
 <template>
   <div class="column items-center">
-    <q-card bordered class="q-ma-lg q-py-sm list-container">
+    <q-card
+      bordered
+      :class="{small: small}"
+      class="q-ma-lg q-py-sm list-container">
       <div class="q-pa-md text-h6 text-primary">
-        Hey, we might have found some jobs you may fit in!
+        <span v-if="small">
+          Your list
+        </span>
+        <span v-else>
+          Hey, we might have found some jobs you may fit in!
+        </span>
       </div>
-      <q-list bordered class="rounded-borders">
+      <q-list bordered class="rounded-borders" :dense="small">
         <q-item-label header>Top recommendations</q-item-label>
 
         <div v-for="(job, idx) in jobDataList" :key="idx">
@@ -15,7 +23,7 @@
               </q-avatar>
             </q-item-section>
 
-            <q-item-section top class="col-3">
+            <q-item-section top class="col-3" v-if="!small">
               <q-item-label class="q-mt-sm">{{ job.company }}</q-item-label>
               <q-item-label lines="1">
                 <span class="text-weight-thin">{{ job.location }}</span>
@@ -27,8 +35,10 @@
                 <span class="text-weight-medium">{{ job.name }}</span>
                 <span class="text-grey-8"> - {{ job.type }}</span>
               </q-item-label>
-              <q-item-label caption lines="2">{{ getDescription(job) }}</q-item-label>
-              <q-item-label lines="1">
+              <q-item-label caption lines="2">
+                {{ getDescription(job) }}
+              </q-item-label>
+              <q-item-label lines="1" v-if="!small">
                 <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills">{{ s }}</q-badge>
               </q-item-label>
             </q-item-section>
@@ -67,6 +77,7 @@ import {formatDescription, getNamedIcon} from "components/processing";
 @Component
 export default class ListingView extends Vue {
   @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
+  @Prop({ type: Boolean }) readonly small?: boolean;
 
   getNamedIcon(job: JobData) {
     return getNamedIcon(job)
@@ -88,5 +99,11 @@ export default class ListingView extends Vue {
   max-width: 50em;
   border-radius: 1.75em;
   box-shadow: 0px 13px 20px 2px #c3c3c34d;
+  //transition: width 500ms ease;
+
+  &.small{
+    width: 20em;
+    border-radius: 0.75em;
+  }
 }
 </style>

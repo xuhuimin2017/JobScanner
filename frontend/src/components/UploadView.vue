@@ -109,7 +109,7 @@ import { Vue, Component } from 'vue-property-decorator'
 @Component
 export default class UploadView extends Vue {
   isUploading: boolean = false
-  uploadPercentage = 45
+  uploadPercentage = 12
   file: File | null = null
   currentStep = 'beforeUpload'
   error = {
@@ -122,6 +122,15 @@ export default class UploadView extends Vue {
     return this.file?.name
   }
 
+  delay() {
+    return new Promise(function(resolve, reject) {
+      // Setting 2000 ms time
+      setTimeout(resolve, 400);
+    }).then(function() {
+      console.log("Wrapped setTimeout after 2000ms");
+    })
+  }
+
   cmdUpload() {
     this.isUploading = true
     const formData = new FormData();
@@ -129,22 +138,26 @@ export default class UploadView extends Vue {
     formData.append('file', this.file);
     console.log(this.file)
 
-    this.$axios.post( '/file-progress',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        },
-        onUploadProgress: ( progressEvent ) => {
-          this.uploadPercentage = ( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ))
-          console.log('onUploadProgress', progressEvent)
-        }
-      })
-      .then(() => {
-        console.log('SUCCESS!!');
+    this.delay().then(() => {
+      return this.$axios.post( 'http://localhost:5000/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: ( progressEvent ) => {
+            this.uploadPercentage = ( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ))
+            console.log('onUploadProgress', progressEvent)
+            if (this.uploadPercentage >= 100 && !this.error.upload) {
+              this.currentStep = 'processing'
+            }
+          }
+        })
+    }).then(data => {
+        console.log('SUCCESS!', data)
         this.currentStep = 'processing'
-    })
-      .catch(e => {
+        this.$router.push({name: 'result', params: {jobDataList: data.data}})
+    }).catch(e => {
         console.log('FAILURE!!');
         this.error.upload = e
       })

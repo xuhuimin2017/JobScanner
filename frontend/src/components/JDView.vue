@@ -4,8 +4,16 @@
 
       <q-card-section class="bg-primary text-white">
         <div class="text-h6 ellipsis">
-          {{ jobData.name }} - <span class="text-weight-light">{{ jobData.type}}</span>
-          <q-btn class="float-right" round flat dense icon="mdi-open-in-new"></q-btn>
+          {{ jobData.name }} -
+          <span class="text-weight-light">{{ jobData.type}}</span>
+          <div class="float-right" >
+            <q-btn
+              round flat dense icon="mdi-undo-variant"
+              title="Back to list"
+              @click="$emit('close')"
+            ></q-btn>
+            <q-btn round flat dense icon="mdi-open-in-new"></q-btn>
+          </div>
         </div>
         <div class="text-subtitle2">
           <a class="text-white" :href="jobData.company_url" target="_blank">{{ jobData.company }}</a>
@@ -117,7 +125,7 @@ export default class JDView extends Vue {
 <style lang="scss" scoped>
 .list-container {
   width: 70vw;
-  max-width: 64em;
+  max-width: 50em;
   border-radius: 1.75em;
   box-shadow: 0px 13px 20px 2px #c3c3c34d;
   border-width: 0;
