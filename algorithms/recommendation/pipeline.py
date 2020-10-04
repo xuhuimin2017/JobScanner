@@ -1,4 +1,3 @@
-import re
 import json
 import time
 from pathlib import Path
@@ -6,20 +5,22 @@ from pprint import pprint
 from typing import Dict
 
 import numpy as np
-import pandas as pd
-import gensim
 import pdfminer.high_level
-from gensim.models.doc2vec import Doc2Vec, LabeledSentence
 
 _path_cur = Path(__file__).absolute().resolve().parent
-_path_w2vbin = _path_cur / 'GoogleNews-vectors-negative300.bin'
-_path_hoff_profile = _path_cur / 'hubstaff_profiles.json'
-_path_hoff_desc = _path_cur / './hubstaff_job_descriptions.json'
+_path_data = _path_cur / 'data'
+_path_embedded = _path_data / 'skill_emb.json'
+_path_hoff_desc = _path_data / 'hubstaff_job_descriptions.json'
 
 print('Data preparing...')
 time_start = time.time()
-# Load Google's pre-trained Word2Vec model.
-model = gensim.models.KeyedVectors.load_word2vec_format(str(_path_w2vbin), binary=True)
+with open(_path_embedded) as json_file:
+    skill_emb = json.load(json_file)
+
+with open(_path_hoff_desc) as fp:
+    job_des = json.load(fp)
+
+skills = [i['skills'] for i in job_des]
 
 
 def skill(x):
@@ -27,31 +28,14 @@ def skill(x):
     a = a.split(' ')
     b = []
     for i in a:
-        if i in model.wv.vocab:
-            b.append(model[i])
-    if not b:
+        if i in skill_emb:
+            b.append(skill_emb[i])
+    if b == []:
         return [0] * 300
     else:
         return list(np.mean(b, axis=0))
 
 
-with open(str(_path_hoff_profile)) as fp:  # speciality,skills,pay_rate
-    profile = json.load(fp)
-
-skill_dict = [j.lower() for i in profile for j in i['skills']]
-
-with open(str(_path_hoff_desc)) as fp:  # complete
-    job_des = json.load(fp)
-
-skill_dict1 = [j.lower() for i in job_des for j in i['skills']]
-
-diction_all = list(set(skill_dict + skill_dict1))  # 得到一个技能字典
-
-skill_emb = dict(zip([i for i in diction_all], [skill(i) for i in diction_all]))
-
-# Job
-
-skills = [i['skills'] for i in job_des]
 skill_dimen = [skill([j.lower() for j in i]) for i in skills]  # 计算所有工作的embedding
 
 
@@ -63,7 +47,6 @@ def normalize(v):
 
 
 norm_skill_dimen = [normalize(i) for i in skill_dimen]
-
 print(f'... done in {time.time() - time_start:.3} seconds')
 
 
@@ -79,13 +62,13 @@ def cv_from_text(txt_file):
 
 def get_job_recommendations(cv_text: str, top=5) -> Dict:
     if not cv_text:
-        raise ValueError('cv text not valid')
+        raise ValueError('CV text not valid')
 
     text = cv_text.lower().split()
-    print('text len =', len(text))
+    print('Text len =', len(text))
     my_skill = skill(list(set([i for i in text if i in skill_emb.keys()])))
     extract_skills = set([i for i in text if i in skill_emb.keys()])  # 从简历里面提取出在技能字典的词
-    print('extract skills:', extract_skills)
+    print('Extract skills:', extract_skills)
 
     a = np.array(norm_skill_dimen).dot(np.array(normalize(my_skill)))  # 计算简历和所有技能的相似性
 
@@ -94,15 +77,15 @@ def get_job_recommendations(cv_text: str, top=5) -> Dict:
 
 
 if __name__ == '__main__':
-    # Some quick and dirty texts
-    cv = cv_from_text('./CV1.txt')
+    # Some quick and dirty tests
+    cv = cv_from_text('research/CV1.txt')
     job_recommendations = get_job_recommendations(cv)
-    with open('Recom.json', 'w') as f:
+    with open('research/Recom.json', 'w') as f:
         json.dump(job_recommendations, f)
     pprint(job_recommendations)
 
-    cv = cv_from_pdf('./CV.pdf')
+    cv = cv_from_pdf('research/CV.pdf')
     job_recommendations = get_job_recommendations(cv)
-    with open('Recom_pdf.json', 'w') as f:
+    with open('research/Recom_pdf.json', 'w') as f:
         json.dump(job_recommendations, f)
     pprint(job_recommendations)
