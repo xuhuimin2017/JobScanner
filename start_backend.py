@@ -1,4 +1,4 @@
-from algorithms.recommendation import pipeline
+from algorithms.recommendation.pipeline import Pipeline
 from pathlib import Path
 
 from flask import Flask, render_template, request, redirect, url_for, jsonify
@@ -6,6 +6,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+pipe = Pipeline().load()
 
 _path_cur = Path(__file__).resolve().absolute().parent
 _path_temp = _path_cur / 'temp'
@@ -19,8 +20,8 @@ def index():
 
 
 def get_job_recommends(pdf_path):
-    cv_text = pipeline.cv_from_pdf(pdf_path)
-    return pipeline.get_job_recommendations(cv_text)
+    cv_text = pipe.cv_from_pdf(pdf_path)
+    return pipe.get_job_recommendations(cv_text)
 
 
 @app.route('/upload', methods=['POST'])

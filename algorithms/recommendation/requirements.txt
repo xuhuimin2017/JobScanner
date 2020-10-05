@@ -7,4 +7,4 @@ matplotlib
 statsmodels
 networkx
 
-pdfminer
+pdfminer.six

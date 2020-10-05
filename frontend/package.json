@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "aws-sdk": "^2.766.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
+    "uuid": "^8.3.1",
     "vue-class-component": "^7.2.2",
     "vue-i18n": "^8.0.0",
     "vue-property-decorator": "^8.3.0"
