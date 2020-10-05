@@ -140,32 +140,35 @@ export default class UploadView extends Vue {
     formData.append('file', this.file);
     console.log(this.file)
 
+    try {
+      uploadResume(this.file)
+    } catch (e) {
+      console.error('upload failed!', e)
+      this.error.upload = e
+      throw e
+    }
     uploadResume(this.file)
-
-    // this.delay().then(() => {
-    //   return this.$axios.post( 'http://localhost:5000/upload',
-    //     formData,
-    //     {
-    //       headers: {
-    //         'Content-Type': 'multipart/form-data'
-    //       },
-    //       onUploadProgress: ( progressEvent ) => {
-    //         this.uploadPercentage = ( Math.round( ( progressEvent.loaded / progressEvent.total ) * 100 ))
-    //         console.log('onUploadProgress', progressEvent)
-    //         if (this.uploadPercentage >= 100 && !this.error.upload) {
-    //           this.currentStep = 'processing'
-    //         }
-    //       }
-    //     })
-    // }).then(data => {
-    //     console.log('SUCCESS!', data)
-    //     this.currentStep = 'processing'
-    //     this.$router.push({name: 'result', params: {jobDataList: data.data}})
-    // }).catch(e => {
-    //     console.log('FAILURE!!');
-    //     this.error.upload = e
-    //   })
-    // .finally(() => {})
+      .catch(e => {})
+      .then(s3FileId => {
+      console.log('upload successfully!', s3FileId)
+      this.currentStep = 'processing'
+      return this.$axios.get(
+        'https://tukp4261jb.execute-api.us-east-2.amazonaws.com/Prod/jobsRecommends?resume_file_id=' + s3FileId,
+        {
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          mode: 'no-cors',
+        })
+    }).catch(e => {
+      console.error('processing failed!', e)
+      this.error.processing = e
+      throw e
+    }).then(resp => {
+      console.log('resp', resp)
+      this.$router.push({name: 'result', params: {jobDataList: data.data}})
+    }).finally(() => {})
   }
 
   cmdReset() {

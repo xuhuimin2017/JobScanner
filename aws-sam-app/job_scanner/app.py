@@ -33,6 +33,12 @@ def lambda_handler(event, context):
     """
     resume_file_id = event.get('resume_file_id')
     if not resume_file_id:
+        # Maybe it's passed from API gateway
+        query_param = event.get('queryStringParameters')
+        if query_param:
+            resume_file_id = query_param.get('resume_file_id')
+
+    if not resume_file_id:
         raise ValueError("Required field not found")
 
     pipe = Pipeline().load()
