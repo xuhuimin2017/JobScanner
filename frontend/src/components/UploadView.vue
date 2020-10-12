@@ -140,13 +140,6 @@ export default class UploadView extends Vue {
     formData.append('file', this.file);
     console.log(this.file)
 
-    try {
-      uploadResume(this.file)
-    } catch (e) {
-      console.error('upload failed!', e)
-      this.error.upload = e
-      throw e
-    }
     uploadResume(this.file)
       .catch(e => {})
       .then(s3FileId => {
