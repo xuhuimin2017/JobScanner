@@ -52,7 +52,7 @@ export default class MainLayout extends Vue {
   leftDrawerOpen = false
   get style () {
     return {
-      height: this.$q.screen.height + 'px'
+      height: `${this.$q.screen.height} px`
     }
   }
 }

@@ -21,12 +21,10 @@
 <script lang="ts">
 import ListingView from 'components/ListingView.vue'
 import JDView from 'components/JDView.vue'
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 
-import sampleList from 'components/sample.json'
-import { morph } from 'quasar'
+// import sampleList from 'components/sample.json'
 import { JobData } from 'components/models'
-// console.log(sampleList)
 
 @Component({
   components: { ListingView, JDView }
@@ -36,20 +34,17 @@ export default class UploadPage extends Vue {
 
   currentPreviewJdIdx: number | null = null
 
-  @Watch('currentPreviewJdIdx')
-  onCurrentIdxChange (val: string, oldVal: string) {
-    console.log('onchange')
-    const onToggle = () => {
-      console.log('on toggle')
-    }
-
-    // morph({
-    //   from: this.$refs.listingView,
-    //   onToggle,
-    //   duration: 500,
-    //   tween: true
-    // })
-  }
+  // @Watch('currentPreviewJdIdx')
+  // onCurrentIdxChange (val: string, oldVal: string) {
+  //   console.log('onchange')
+  //
+  //   // morph({
+  //   //   from: this.$refs.listingView,
+  //   //   onToggle,
+  //   //   duration: 500,
+  //   //   tween: true
+  //   // })
+  // }
 
   get rcmJobList () {
     // return sampleList
@@ -66,7 +61,7 @@ export default class UploadPage extends Vue {
     }
   }
 
-  onSelectJob (idx) {
+  onSelectJob (idx: number) {
     // console.log(idx)
     this.currentPreviewJdIdx = idx
   }

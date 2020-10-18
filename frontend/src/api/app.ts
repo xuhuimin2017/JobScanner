@@ -2,6 +2,7 @@ import AWS from 'aws-sdk'
 import { v4 as uuidV4 } from 'uuid'
 import { bucketRegion, identityPoolId, bucketName, bucketPath, jobFunctionAPIBase } from 'src/api/config'
 import axios from 'axios'
+import { JobData } from 'components/models'
 
 AWS.config.update({
   region: bucketRegion,
@@ -46,8 +47,10 @@ export function getJobsFromResume (fileId: string) {
         'Content-Type': 'application/json'
       }
     }).then(
-    respData => {
-      return respData
+    (respData): JobData => {
+      console.log('getJobsFromResume resp', respData)
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return respData.data
     }
   )
 }

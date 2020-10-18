@@ -1,6 +1,7 @@
 export interface JobData {
   name: string
   company: string
+  // eslint-disable-next-line camelcase
   company_url: string
   location: string
   type: string

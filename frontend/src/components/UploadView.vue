@@ -106,6 +106,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { getJobsFromResume, uploadResume } from 'src/api/app'
+import { JobData } from 'components/models'
 
 @Component
 export default class UploadView extends Vue {
@@ -123,15 +124,7 @@ export default class UploadView extends Vue {
     return this.file?.name
   }
 
-  mounted () {}
-
-  delay () {
-    return new Promise(function (resolve, reject) {
-      setTimeout(resolve, 400)
-    }).then(function () {
-      console.log('Wrapped setTimeout after 2000ms')
-    })
-  }
+  // mounted () {}
 
   cmdUpload () {
     this.isUploading = true
@@ -141,7 +134,7 @@ export default class UploadView extends Vue {
     console.log(this.file)
 
     uploadResume(this.file)
-      .catch(e => {
+      .catch((e: string) => {
         console.error('Resume uploading failed!', e)
         this.error.upload = e
         throw e
@@ -150,13 +143,13 @@ export default class UploadView extends Vue {
         console.log('Resume uploading successfully!', s3FileId)
         this.currentStep = 'processing'
         return getJobsFromResume(s3FileId)
-      }).catch(e => {
+      }).catch((e: string) => {
         console.error('Processing resume failed!', e)
         this.error.processing = e
         throw e
-      }).then(resp => {
-        console.log('resp', resp)
-        this.$router.push({ name: 'result', params: { jobDataList: resp.data } })
+      }).then((data: JobData) => {
+        return this.$router.push({ name: 'result', params: { jobDataList: data } })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       }).finally(() => {})
   }
 

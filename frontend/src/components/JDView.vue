@@ -53,13 +53,12 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>Experience Level</q-item-label>
-            <q-item-label
-              caption lines="1"
-              v-for="e in jobData.experience_levels" :key="e"
-              v-if="jobData.experience_levels"
-            >
-              {{ e }}
-            </q-item-label>
+            <template
+              v-if="jobData.experience_levels">
+              <q-item-label caption lines="1" v-for="e in jobData.experience_levels" :key="e">
+                {{ e }}
+              </q-item-label>
+            </template>
             <q-item-label v-else>Not listed</q-item-label>
           </q-item-section>
         </q-item>
@@ -85,7 +84,7 @@
           color="primary"
           text-color="white"
           class="q-mr-xs"
-          v-for="s in jobData.skills">
+          v-for="s in jobData.skills" :key="s">
           {{ s }}
         </q-badge>
       </q-card-section>
@@ -110,7 +109,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { JobData } from 'components/models'
 
-import { formatDescription, getNamedIcon } from 'components/processing'
+import { formatDescription } from 'components/processing'
 
 @Component
 export default class JDView extends Vue {

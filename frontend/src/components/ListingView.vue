@@ -39,7 +39,9 @@
                 {{ getDescription(job) }}
               </q-item-label>
               <q-item-label lines="1" v-if="!small">
-                <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills">{{ s }}</q-badge>
+                <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills" :key="s">
+                  {{ s }}
+                </q-badge>
               </q-item-label>
             </q-item-section>
 
