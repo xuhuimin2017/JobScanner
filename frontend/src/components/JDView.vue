@@ -107,16 +107,16 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop} from 'vue-property-decorator'
-import {JobData} from "components/models";
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { JobData } from 'components/models'
 
-import {formatDescription, getNamedIcon} from "components/processing";
+import { formatDescription, getNamedIcon } from 'components/processing'
 
 @Component
 export default class JDView extends Vue {
   @Prop({ type: Object, required: true }) readonly jobData!: JobData;
 
-  getDescription(job: JobData) {
+  getDescription (job: JobData) {
     return formatDescription(job)
   }
 }

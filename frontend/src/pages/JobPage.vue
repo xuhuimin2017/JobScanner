@@ -21,11 +21,11 @@
 <script lang="ts">
 import ListingView from 'components/ListingView.vue'
 import JDView from 'components/JDView.vue'
-import {Vue, Component, Watch, Prop} from 'vue-property-decorator'
+import { Vue, Component, Watch, Prop } from 'vue-property-decorator'
 
 import sampleList from 'components/sample.json'
-import {morph} from "quasar";
-import {JobData} from "components/models";
+import { morph } from 'quasar'
+import { JobData } from 'components/models'
 // console.log(sampleList)
 
 @Component({
@@ -37,7 +37,7 @@ export default class UploadPage extends Vue {
   currentPreviewJdIdx: number | null = null
 
   @Watch('currentPreviewJdIdx')
-  onCurrentIdxChange(val: string, oldVal: string) {
+  onCurrentIdxChange (val: string, oldVal: string) {
     console.log('onchange')
     const onToggle = () => {
       console.log('on toggle')
@@ -51,22 +51,22 @@ export default class UploadPage extends Vue {
     // })
   }
 
-  get rcmJobList() {
+  get rcmJobList () {
     // return sampleList
     return this.jobDataList
   }
 
-  get isDetailShown() {
+  get isDetailShown () {
     return this.currentPreviewJdIdx !== null
   }
 
-  set isDetailShown(val) {
+  set isDetailShown (val) {
     if (!val) {
       this.currentPreviewJdIdx = null
     }
   }
 
-  onSelectJob(idx) {
+  onSelectJob (idx) {
     // console.log(idx)
     this.currentPreviewJdIdx = idx
   }

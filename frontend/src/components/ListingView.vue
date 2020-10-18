@@ -68,9 +68,9 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop} from 'vue-property-decorator'
-import {JobData} from "components/models";
-import {formatDescription, getNamedIcon} from "components/processing";
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { JobData } from 'components/models'
+import { formatDescription, getNamedIcon } from 'components/processing'
 // import sampleList from './sample.json'
 // console.log(sampleList)
 
@@ -79,15 +79,15 @@ export default class ListingView extends Vue {
   @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
   @Prop({ type: Boolean }) readonly small?: boolean;
 
-  getNamedIcon(job: JobData) {
+  getNamedIcon (job: JobData) {
     return getNamedIcon(job)
   }
 
-  getDescription(job: JobData) {
+  getDescription (job: JobData) {
     return formatDescription(job)
   }
 
-  cmdSelect(idx) {
+  cmdSelect (idx) {
     this.$emit('select', idx)
   }
 }

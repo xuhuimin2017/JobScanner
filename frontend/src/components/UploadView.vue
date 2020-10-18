@@ -105,7 +105,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import {getJobsFromResume, uploadResume} from 'src/api/app'
+import { getJobsFromResume, uploadResume } from 'src/api/app'
 
 @Component
 export default class UploadView extends Vue {

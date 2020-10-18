@@ -39,7 +39,6 @@
   </q-layout>
 </template>
 
-
 <script lang="ts">
 import EssentialLink from 'components/EssentialLink.vue'
 
