@@ -128,9 +128,7 @@ export default class UploadView extends Vue {
 
   cmdUpload () {
     this.isUploading = true
-    const formData = new FormData()
     this.currentStep = 'uploading'
-    formData.append('file', this.file)
     console.log(this.file)
 
     uploadResume(this.file)

@@ -89,7 +89,7 @@ export default class ListingView extends Vue {
     return formatDescription(job)
   }
 
-  cmdSelect (idx) {
+  cmdSelect (idx: number) {
     this.$emit('select', idx)
   }
 }

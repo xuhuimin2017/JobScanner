@@ -16,7 +16,8 @@ const _s3 = new AWS.S3({
   params: { Bucket: bucketName }
 })
 
-export function uploadResume (file: File): Promise<string> {
+export function uploadResume (file: File | null): Promise<string> {
+  if (!file) throw new Error('no file')
   // var fileName = file.name;
   const fileId = uuidV4()
   const fileFullKey = bucketPath + '/' + fileId
