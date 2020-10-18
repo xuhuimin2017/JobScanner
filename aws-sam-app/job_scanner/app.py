@@ -33,6 +33,8 @@ def lambda_handler(event, context):
     """
     resume_file_id = event.get('resume_file_id')
     if not resume_file_id:
+        resume_file_id = event.get('body', {}).get('resume_file_id')
+    if not resume_file_id:
         # Maybe it's passed from API gateway
         query_param = event.get('queryStringParameters')
         if query_param:
@@ -61,5 +63,10 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
+        'headers': {
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
+        },
         "body": json.dumps(jobs),
     }

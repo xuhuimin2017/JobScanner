@@ -1,5 +1,7 @@
-import AWS from "aws-sdk";
+import AWS from 'aws-sdk'
 import { v4 as uuidV4 } from 'uuid'
+import { bucketRegion, identityPoolId, bucketName, bucketPath, jobFunctionAPIBase } from 'src/api/config'
+import axios from 'axios'
 
 AWS.config.update({
   region: bucketRegion,
@@ -8,29 +10,44 @@ AWS.config.update({
   })
 })
 
-const s3 = new AWS.S3({
+const _s3 = new AWS.S3({
   apiVersion: '2006-03-01',
-  params: { Bucket: resumeBucketName }
+  params: { Bucket: bucketName }
 })
 
-
-export function uploadResume (file: File) {
+export function uploadResume (file: File): Promise<string> {
   // var fileName = file.name;
-  const fileKey = uploadPath + '/' + uuidV4()
+  const fileId = uuidV4()
+  const fileFullKey = bucketPath + '/' + fileId
 
-  const _upload = s3.upload({
-    Bucket: resumeBucketName,
-    Key: fileKey,
+  const _upload = _s3.upload({
+    Bucket: bucketName,
+    Key: fileFullKey,
     Body: file
   })
 
   return _upload.promise().then(
-    (data) => {
+    data => {
       console.log('upload done', data)
-      return fileKey
+      return fileId
     },
-    (err) => {
+    err => {
       throw err
+    }
+  )
+}
+
+export function getJobsFromResume (fileId: string) {
+  return axios.get(
+    `${jobFunctionAPIBase}/jobsRecommends?resume_file_id=${fileId}`,
+    {
+      headers: {
+        // 'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    }).then(
+    respData => {
+      return respData
     }
   )
 }

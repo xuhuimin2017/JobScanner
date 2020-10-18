@@ -105,11 +105,11 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import { uploadResume } from "components/aws";
+import {getJobsFromResume, uploadResume} from 'src/api/app'
 
 @Component
 export default class UploadView extends Vue {
-  isUploading: boolean = false
+  isUploading = false
   uploadPercentage = 12
   file: File | null = null
   currentStep = 'beforeUpload'
@@ -119,52 +119,48 @@ export default class UploadView extends Vue {
     processing: false
   }
 
-  get filename() {
+  get filename () {
     return this.file?.name
   }
 
-  mounted() {}
+  mounted () {}
 
-  delay() {
-    return new Promise(function(resolve, reject) {
-      setTimeout(resolve, 400);
-    }).then(function() {
-      console.log("Wrapped setTimeout after 2000ms");
+  delay () {
+    return new Promise(function (resolve, reject) {
+      setTimeout(resolve, 400)
+    }).then(function () {
+      console.log('Wrapped setTimeout after 2000ms')
     })
   }
 
-  cmdUpload() {
+  cmdUpload () {
     this.isUploading = true
-    const formData = new FormData();
+    const formData = new FormData()
     this.currentStep = 'uploading'
-    formData.append('file', this.file);
+    formData.append('file', this.file)
     console.log(this.file)
 
     uploadResume(this.file)
-      .catch(e => {})
+      .catch(e => {
+        console.error('Resume uploading failed!', e)
+        this.error.upload = e
+        throw e
+      })
       .then(s3FileId => {
-      console.log('upload successfully!', s3FileId)
-      this.currentStep = 'processing'
-      return this.$axios.get(
-        'https://tukp4261jb.execute-api.us-east-2.amazonaws.com/Prod/jobsRecommends?resume_file_id=' + s3FileId,
-        {
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-          },
-          mode: 'no-cors',
-        })
-    }).catch(e => {
-      console.error('processing failed!', e)
-      this.error.processing = e
-      throw e
-    }).then(resp => {
-      console.log('resp', resp)
-      this.$router.push({name: 'result', params: {jobDataList: data.data}})
-    }).finally(() => {})
+        console.log('Resume uploading successfully!', s3FileId)
+        this.currentStep = 'processing'
+        return getJobsFromResume(s3FileId)
+      }).catch(e => {
+        console.error('Processing resume failed!', e)
+        this.error.processing = e
+        throw e
+      }).then(resp => {
+        console.log('resp', resp)
+        this.$router.push({ name: 'result', params: { jobDataList: resp.data } })
+      }).finally(() => {})
   }
 
-  cmdReset() {
+  cmdReset () {
     this.error.beforeUpload = false
     this.error.upload = false
     this.error.processing = false
@@ -172,8 +168,6 @@ export default class UploadView extends Vue {
     this.file = null
     this.currentStep = 'beforeUpload'
   }
-
-
 }
 </script>
 
