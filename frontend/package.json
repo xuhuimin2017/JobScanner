@@ -10,7 +10,8 @@
     "lint:fix": "eslint --ext .js,.ts,.vue ./ --fix",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "deploy:s3": "aws s3 sync dist/spa/. s3://jobscanner-site --delete"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
