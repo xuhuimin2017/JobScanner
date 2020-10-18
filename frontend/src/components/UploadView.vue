@@ -108,16 +108,22 @@ import { Vue, Component } from 'vue-property-decorator'
 import { getJobsFromResume, uploadResume } from 'src/api/app'
 import { JobData } from 'components/models'
 
+interface ErrorStage {
+  beforeUpload: string | null,
+  upload: string | null,
+  processing: string | null
+}
+
 @Component
 export default class UploadView extends Vue {
   isUploading = false
   uploadPercentage = 12
   file: File | null = null
   currentStep = 'beforeUpload'
-  error = {
-    beforeUpload: false,
-    upload: false,
-    processing: false
+  error: ErrorStage = {
+    beforeUpload: null,
+    upload: null,
+    processing: null
   }
 
   get filename () {
@@ -131,7 +137,7 @@ export default class UploadView extends Vue {
     this.currentStep = 'uploading'
     console.log(this.file)
 
-    uploadResume(this.file)
+    return uploadResume(this.file)
       .catch((e: string) => {
         console.error('Resume uploading failed!', e)
         this.error.upload = e
@@ -146,15 +152,17 @@ export default class UploadView extends Vue {
         this.error.processing = e
         throw e
       }).then((data: JobData) => {
-        return this.$router.push({ name: 'result', params: { jobDataList: data } })
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      }).finally(() => {})
+        return this.$router.push({
+          name: 'result',
+          params: { jobDataList: JSON.stringify(data) }
+        })
+      })
   }
 
   cmdReset () {
-    this.error.beforeUpload = false
-    this.error.upload = false
-    this.error.processing = false
+    this.error.beforeUpload = null
+    this.error.upload = null
+    this.error.processing = null
     this.isUploading = false
     this.file = null
     this.currentStep = 'beforeUpload'

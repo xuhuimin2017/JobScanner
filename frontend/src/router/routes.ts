@@ -7,7 +7,15 @@ const routes: RouteConfig[] = [
     children: [
       // { path: 'index', component: () => import('pages/Index.vue') },
       { name: 'upload', path: '', component: () => import('pages/UploadPage.vue') },
-      { name: 'result', path: 'result', component: () => import('pages/JobPage.vue'), props: true }
+      {
+        name: 'result',
+        path: 'result',
+        component: () => import('pages/JobPage.vue'),
+        props: route => ({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          jobDataList: JSON.parse(route.params.jobDataList)
+        })
+      }
     ]
   },
 
