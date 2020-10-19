@@ -9,10 +9,23 @@
           Your list
         </span>
         <span v-else>
-          Hey, we might have found some jobs you may fit in!
+          Hey, we have found some jobs you may fit in!
         </span>
       </div>
       <q-list bordered class="rounded-borders" :dense="small">
+        <q-item-label header>Your highlight skills</q-item-label>
+        <q-item>
+          <q-item-section>
+            <q-item-label>
+              <div class="multiline-tag">
+                <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in mySkills" :key="s">
+                  {{ s }}
+                </q-badge>
+              </div>
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item-label header>Top recommendations</q-item-label>
 
         <div v-for="(job, idx) in jobDataList" :key="idx">
@@ -63,7 +76,7 @@
       </q-list>
 
       <div class="column items-center q-mt-sm">
-        <q-btn rounded flat color="primary" label="Start Over"></q-btn>
+        <q-btn rounded flat color="primary" label="Start Over" @click="$router.push({name: 'upload'})"></q-btn>
       </div>
     </q-card>
   </div>
@@ -79,6 +92,7 @@ import { formatDescription, getNamedIcon } from 'components/processing'
 @Component
 export default class ListingView extends Vue {
   @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
+  @Prop({ type: Array }) readonly mySkills?: [string];
   @Prop({ type: Boolean }) readonly small?: boolean;
 
   getNamedIcon (job: JobData) {
@@ -107,5 +121,9 @@ export default class ListingView extends Vue {
     width: 20em;
     border-radius: 0.75em;
   }
+}
+
+.multiline-tag {
+  line-height: 1.3em !important;
 }
 </style>

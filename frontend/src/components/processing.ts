@@ -5,5 +5,5 @@ export const getNamedIcon = function (job: JobData) {
 }
 
 export const formatDescription = function (job: JobData) {
-  return typeof job.description === 'object' ? job.description.join(' ') : job.description
+  return job.description instanceof Array ? job.description.join(' ') : job.description
 }

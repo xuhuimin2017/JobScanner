@@ -8,3 +8,8 @@ export interface JobData {
   description: string | [string]
   skills: [string]
 }
+
+export interface RecommendationModel {
+  mySkills: [string],
+  jobs: [JobData]
+}

@@ -40,13 +40,10 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue'
 
 import { Vue, Component } from 'vue-property-decorator'
 
-@Component({
-  components: { EssentialLink }
-})
+@Component
 export default class MainLayout extends Vue {
   conversations = []
   leftDrawerOpen = false

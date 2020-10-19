@@ -35,13 +35,13 @@
         >
           <div class="row items-center q-gutter-sm">
             <div><q-btn
-              :disable="error.upload !== ''"
+              :disable="!error.upload"
               class="style-widget"
               round unelevated dense icon="pause">
             </q-btn></div>
             <div><q-circular-progress
               reverse
-              :value="uploadPercentage"
+              indeterminate
               size="8em"
               :thickness="0.09"
               show-value
@@ -50,7 +50,7 @@
               class="q-ma-md"
             >
               <span class="text-center text-subtitle1">
-                {{ error.upload ? 'Error' : `${uploadPercentage}%` }}
+                {{ error.upload ? 'Error' : 'Uploading' }}
               </span>
             </q-circular-progress></div>
             <div>
@@ -82,7 +82,7 @@
             <div><q-btn disable class="style-widget" round unelevated dense icon="pause"></q-btn></div>
             <div><q-circular-progress
               reverse
-              indeterminate
+              :indeterminate="!error.processing"
               size="8em"
               :thickness="0.09"
               show-value
@@ -95,7 +95,8 @@
             <div><q-btn disable class="style-widget" round unelevated dense icon="close"></q-btn></div>
           </div>
           <div class="ellipsis">
-            Processing... will be right soon!
+            <template v-if="error.processing" class="text-red">{{ error.processing }}</template>
+            <template v-else>Processing... will be right soon!</template>
           </div>
         </div>
       </q-card-section>
@@ -106,7 +107,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
 import { getJobsFromResume, uploadResume } from 'src/api/app'
-import { JobData } from 'components/models'
+import { RecommendationModel } from 'components/models'
 
 interface ErrorStage {
   beforeUpload: string | null,
@@ -117,7 +118,6 @@ interface ErrorStage {
 @Component
 export default class UploadView extends Vue {
   isUploading = false
-  uploadPercentage = 12
   file: File | null = null
   currentStep = 'beforeUpload'
   error: ErrorStage = {
@@ -151,11 +151,13 @@ export default class UploadView extends Vue {
         console.error('Processing resume failed!', e)
         this.error.processing = e
         throw e
-      }).then((data: JobData) => {
+      }).then((data: RecommendationModel) => {
         return this.$router.push({
           name: 'result',
-          params: { jobDataList: JSON.stringify(data) }
+          params: { recommendationData: JSON.stringify(data) }
         })
+      }).finally(() => {
+        this.isUploading = false
       })
   }
 

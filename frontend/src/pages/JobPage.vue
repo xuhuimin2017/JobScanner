@@ -5,6 +5,7 @@
         v-if="!isDetailShown"
         ref="listingView"
         :job-data-list="rcmJobList"
+        :my-skills="mySkills"
         :small="isDetailShown"
         @select="onSelectJob"
       >
@@ -24,13 +25,13 @@ import JDView from 'components/JDView.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
 // import sampleList from 'components/sample.json'
-import { JobData } from 'components/models'
+import { RecommendationModel } from 'components/models'
 
 @Component({
   components: { ListingView, JDView }
 })
 export default class UploadPage extends Vue {
-  @Prop({ type: Array, required: true }) readonly jobDataList!: JobData;
+  @Prop({ type: Object, required: true }) readonly recommendationData!: RecommendationModel;
 
   currentPreviewJdIdx: number | null = null
 
@@ -48,7 +49,11 @@ export default class UploadPage extends Vue {
 
   get rcmJobList () {
     // return sampleList
-    return this.jobDataList
+    return this.recommendationData.jobs
+  }
+
+  get mySkills () {
+    return this.recommendationData.mySkills
   }
 
   get isDetailShown () {

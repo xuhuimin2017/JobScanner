@@ -2,7 +2,7 @@ import json
 import time
 from pathlib import Path
 from pprint import pprint
-from typing import Dict, List
+from typing import Dict, List, Set, Tuple
 
 import numpy as np
 import pdfminer.high_level
@@ -71,11 +71,11 @@ class Pipeline(PipelineBase):
         return pdfminer.high_level.extract_text(pdf_file)
 
     def cv_from_text(self, txt_file) -> str:
-        with open(txt_file) as f:
-            text = f.read()
+        with open(txt_file) as file:
+            text = file.read()
         return text
 
-    def get_job_recommendations(self, cv_text: str, top=5) -> List[Dict]:
+    def get_job_recommendations(self, cv_text: str, top=5) -> Tuple[List[Dict], Set[str]]:
         """Return jobs from CV string"""
         if not cv_text:
             raise ValueError('CV text not valid')
@@ -89,7 +89,7 @@ class Pipeline(PipelineBase):
         a = np.array(self._norm_skill_dimen).dot(np.array(normalize(my_skill)))  # 计算简历和所有技能的相似性
 
         jobs = [self._job_des[i] for i, j in sorted(enumerate(a), key=lambda x: x[1], reverse=True)[:top]]
-        return jobs
+        return jobs, extract_skills
 
 
 if __name__ == '__main__':
@@ -97,13 +97,13 @@ if __name__ == '__main__':
     pipe = Pipeline().load()
 
     cv = pipe.cv_from_text('research/CV1.txt')
-    job_recommendations = pipe.get_job_recommendations(cv)
+    job_recommendations, _ = pipe.get_job_recommendations(cv)
     with open('research/Recom.json', 'w') as f:
         json.dump(job_recommendations, f)
     pprint(job_recommendations)
 
     cv = pipe.cv_from_pdf('research/CV.pdf')
-    job_recommendations = pipe.get_job_recommendations(cv)
+    job_recommendations, _ = pipe.get_job_recommendations(cv)
     with open('research/Recom_pdf.json', 'w') as f:
         json.dump(job_recommendations, f)
     pprint(job_recommendations)

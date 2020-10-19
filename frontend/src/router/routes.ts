@@ -13,7 +13,7 @@ const routes: RouteConfig[] = [
         component: () => import('pages/JobPage.vue'),
         props: route => ({
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          jobDataList: JSON.parse(route.params.jobDataList)
+          recommendationData: JSON.parse(route.params.recommendationData)
         })
       }
     ]
