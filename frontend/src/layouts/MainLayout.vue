@@ -36,6 +36,12 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-footer class="bg-white text-primary non-selectable text-center q-pa-md">
+      <span class="footer-credit" @mouseenter="heartSuffix=''" @mouseleave="heartSuffix='-outline'">
+        <q-icon :name="'mdi-heart'+heartSuffix"></q-icon>
+        Created by <a href="#">Guangxue Wen</a>, <a href="#">Huimin Xu</a>, <a href="#">Lingfei Wu</a>
+      </span>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -47,6 +53,7 @@ import { Vue, Component } from 'vue-property-decorator'
 export default class MainLayout extends Vue {
   conversations = []
   leftDrawerOpen = false
+  heartSuffix = '-outline'
   get style () {
     return {
       height: `${this.$q.screen.height} px`
@@ -54,6 +61,21 @@ export default class MainLayout extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.footer-credit {
+  a, a:link, a:visited {
+    color: $primary;
+    text-decoration-color: lighten($primary, 30%);
+    text-decoration-style: dotted;
+    transition: all 500ms;
+  }
+  a:hover {
+    text-decoration-color: lighten($primary, 0%);
+    //text-decoration-style: dashed;
+  }
+}
+</style>
 
 <style lang="sass">
 .GNL
