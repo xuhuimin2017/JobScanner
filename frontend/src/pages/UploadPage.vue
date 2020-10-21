@@ -1,15 +1,15 @@
 <template>
   <q-page class="column items-center">
-    <upload-view></upload-view>
+    <landing-view></landing-view>
   </q-page>
 </template>
 
 <script lang="ts">
-import UploadView from 'components/UploadView.vue'
 import { Vue, Component } from 'vue-property-decorator'
+import LandingView from 'components/LandingView.vue'
 
 @Component({
-  components: { UploadView }
+  components: { LandingView }
 })
 export default class UploadPage extends Vue {
 
