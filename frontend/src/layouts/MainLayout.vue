@@ -4,18 +4,16 @@
     <q-header elevated class="bg-white text-grey-8" height-hint="64">
       <q-toolbar class="GNL__toolbar q-pa-lg">
 
-        <q-toolbar-title
-          v-if="$q.screen.gt.xs" shrink class="row items-center no-wrap"
-        >
-          <q-btn flat icon="train" @click="$router.push({name: 'upload'})"></q-btn>
-          <span class="q-ml-sm">JobScanner</span>
+        <q-toolbar-title shrink class="row items-center no-wrap">
+          <q-btn no-caps stretch flat :ripple="false" size="1em" @click="$router.push({name: 'upload'})">
+            JobScanner
+          </q-btn>
         </q-toolbar-title>
 
         <q-space />
 
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn v-if="$q.screen.gt.sm" round dense flat color="text-grey-7" icon="apps">
-            <q-tooltip>Google Apps</q-tooltip>
           </q-btn>
 <!--          <q-btn round dense flat color="grey-8" icon="notifications">-->
 <!--            <q-badge color="red" text-color="white" floating>-->
