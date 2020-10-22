@@ -1,6 +1,6 @@
 
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-white">
+  <q-layout view="hHh lpR fff" class="bg-white">
     <q-header elevated class="bg-white text-grey-8" height-hint="64">
       <q-toolbar class="GNL__toolbar q-pa-lg">
 
@@ -44,7 +44,6 @@
 </template>
 
 <script lang="ts">
-
 import { Vue, Component } from 'vue-property-decorator'
 
 @Component

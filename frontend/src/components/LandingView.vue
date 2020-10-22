@@ -7,7 +7,7 @@
       <div>
         <q-card
           class="icon-card"
-          :class="currentStep === 'processing' ? 'moving-to-center' : ''"
+          :class="isProcessingStep ? 'moving-to-center' : ''"
           style="top:35%; left:4%; animation-delay: 200ms;"
         >
           <q-card-section>
@@ -17,7 +17,7 @@
         </q-card>
         <q-card
           class="icon-card"
-          :class="currentStep === 'processing' ? 'moving-to-center' : ''"
+          :class="isProcessingStep ? 'moving-to-center' : ''"
           style="bottom:8%; left:14%; animation-delay: 500ms;"
         >
           <q-card-section>
@@ -27,7 +27,7 @@
         </q-card>
         <q-card
           class="icon-card"
-          :class="currentStep === 'processing' ? 'moving-to-center' : ''"
+          :class="isProcessingStep ? 'moving-to-center' : ''"
           style="top:26%; right: 2%; animation-delay: 700ms;"
         >
           <q-card-section>
@@ -37,7 +37,7 @@
         </q-card>
         <q-card
           class="icon-card"
-          :class="currentStep === 'processing' ? 'moving-to-center' : ''"
+          :class="isProcessingStep ? 'moving-to-center' : ''"
           style="bottom:14%; right: 12%; animation-delay: 000ms;"
         >
           <q-card-section>
@@ -48,22 +48,24 @@
       </div>
     </q-card>
 
-    <q-card class="main-card">
+    <q-card class="main-card" :class="isProcessingStep ? 'enlarge' : ''">
       <q-card-section class="q-ma-md absolute-full">
-        <upload-view></upload-view>
+        <upload-view @onProcessing="isProcessingStep = true"></upload-view>
       </q-card-section>
     </q-card>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Component, Vue } from 'vue-property-decorator'
 import UploadView from 'components/UploadView.vue'
 
 @Component({
   components: { UploadView }
 })
-export default class LandingView extends Vue {}
+export default class LandingView extends Vue {
+  isProcessingStep = false
+}
 </script>
 
 <style scoped lang="scss">
@@ -85,6 +87,11 @@ export default class LandingView extends Vue {}
   min-height: 14em;
   border-radius: 1.5em;
   box-shadow: 0px 5px 20px 2px #c3c3c34d;
+  transition: all 500ms;
+
+  &.enlarge {
+    transform: scale(1.1);
+  }
 }
 
 .icon-card {
@@ -99,8 +106,8 @@ export default class LandingView extends Vue {}
 }
 
 .moving-to-center {
-  animation: moving-to-center 1s;
-  animation-delay: 0ms;
+  animation: moving-to-center 700ms;
+  animation-delay: 0ms !important;
   animation-iteration-count: 1;
   animation-timing-function: cubic-bezier(0.1, -0.2, 0.2, 0);
   animation-fill-mode: forwards;  // Stay at the finish frame

@@ -95,11 +95,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import {Vue, Component, Watch} from 'vue-property-decorator'
 import { getJobsFromResume, uploadResume } from 'src/api/app'
 import { RecommendationModel } from 'components/models'
 
-enum Stage {
+export const enum Stage {
   initialized = 1,
   uploading,
   processing
@@ -124,13 +124,25 @@ export default class UploadView extends Vue {
     return this.currentStep === Stage.uploading
   }
 
-  get isStageProcessing () {
+  get isStageProcessing () : boolean {
     return this.currentStep === Stage.processing
+  }
+
+  setStep (val: Stage) {
+    if (this.currentStep === val) return
+    this.currentStep = val
+  }
+
+  @Watch('currentStep')
+  onStep () {
+    if (this.isStageProcessing) {
+      this.$emit('onProcessing')
+    }
   }
 
   cmdUpload () {
     this.isProgressing = true
-    this.currentStep = Stage.uploading
+    this.setStep(Stage.uploading)
     console.log(this.file)
 
     return uploadResume(this.file)
@@ -141,7 +153,7 @@ export default class UploadView extends Vue {
       })
       .then(s3FileId => {
         console.log('Resume uploading successfully!', s3FileId)
-        this.currentStep = Stage.processing
+        this.setStep(Stage.processing)
         return getJobsFromResume(s3FileId)
       }).catch((e: string) => {
         console.error('Processing resume failed!', e)
@@ -161,7 +173,7 @@ export default class UploadView extends Vue {
     this.errorMessage = null
     this.isProgressing = false
     this.file = null
-    this.currentStep = Stage.initialized
+    this.setStep(Stage.initialized)
   }
 }
 </script>
