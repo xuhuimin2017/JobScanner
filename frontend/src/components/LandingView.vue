@@ -1,6 +1,7 @@
 <template>
   <div class="column container items-center absolute">
     <q-card flat bordered class="bg-card q-ma-lg bg-secondary">
+      <moving-background class="absolute q-ma-"></moving-background>
       <q-card-section class="q-mt-md text-center big-text text-primary text-weight-medium">
         Upload Resumes, Analyze Skills and Get Jobs!
       </q-card-section>
@@ -59,9 +60,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import UploadView from 'components/UploadView.vue'
+import MovingBackground from "components/MovingBackground.vue";
 
 @Component({
-  components: { UploadView }
+  components: {MovingBackground, UploadView }
 })
 export default class LandingView extends Vue {
   isProcessingStep = false
