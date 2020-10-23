@@ -12,22 +12,7 @@
 
         <q-space />
 
-        <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn v-if="$q.screen.gt.sm" round dense flat color="text-grey-7" icon="apps">
-          </q-btn>
-<!--          <q-btn round dense flat color="grey-8" icon="notifications">-->
-<!--            <q-badge color="red" text-color="white" floating>-->
-<!--              2-->
-<!--            </q-badge>-->
-<!--            <q-tooltip>Notifications</q-tooltip>-->
-<!--          </q-btn>-->
-<!--          <q-btn round flat>-->
-<!--            <q-avatar size="26px">-->
-<!--              <img src="https://cdn.quasar.dev/img/boy-avatar.png">-->
-<!--            </q-avatar>-->
-<!--            <q-tooltip>Account</q-tooltip>-->
-<!--          </q-btn>-->
-        </div>
+        <q-btn round dense flat color="text-grey-7" icon="mdi-github" @click="openGithub"></q-btn>
       </q-toolbar>
     </q-header>
 
@@ -45,16 +30,22 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
+import {openInNewTab} from "src/utils/dom";
 
 @Component
 export default class MainLayout extends Vue {
   conversations = []
   leftDrawerOpen = false
   heartSuffix = '-outline'
+
   get style () {
     return {
       height: `${this.$q.screen.height} px`
     }
+  }
+
+  openGithub() {
+    openInNewTab('https://github.com/wenoptics/JobScanner')
   }
 }
 </script>

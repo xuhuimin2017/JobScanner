@@ -61,7 +61,6 @@ ul {
   animation-delay: 0s;
 }
 
-
 .circles li:nth-child(2){
   left: 10%;
   width: 20px;
@@ -129,8 +128,6 @@ ul {
   animation-delay: 0s;
   animation-duration: 15s;
 }
-
-
 
 @keyframes animate {
   0%{

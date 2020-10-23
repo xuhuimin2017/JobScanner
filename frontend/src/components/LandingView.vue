@@ -4,7 +4,7 @@
       <moving-background class="absolute q-ma-"></moving-background>
       <q-card-section class="q-mt-md text-center text-primary">
         <div class="big-text text-weight-medium">Job Scanner</div>
-        <div class="q-mt-md subtitle-text">Upload Resumes, Analyze Skills and Get Jobs!</div>
+        <div class="q-mt-md subtitle-text animate-float-enter">Upload Resumes, Analyze Skills and Get Jobs!</div>
       </q-card-section>
       <div>
         <q-card
@@ -100,7 +100,7 @@ export default class LandingView extends Vue {
   width: 25em;
   min-height: 14em;
   border-radius: 1.5em;
-  box-shadow: 0px 5px 20px 2px #c3c3c34d;
+  box-shadow: 0 5px 20px 2px #c3c3c34d;
   transition: all 800ms cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack */
 
   &.enlarge {
@@ -112,7 +112,7 @@ export default class LandingView extends Vue {
   position: absolute;
   border-radius: 1.75em;
   border-width: 0;
-  box-shadow: 0px 11px 12px 0px #a7edff55;
+  box-shadow: 0 11px 12px 0 #a7edff55;
   animation: buyoo-buyoo infinite 1.5s;
   :hover {
     transform: scale(1.05, 1.05);
@@ -129,6 +129,13 @@ export default class LandingView extends Vue {
 
 .big-text {
   font-size: x-large;
+}
+
+.animate-float-enter {
+  opacity: 0;
+  animation: float-up 1000ms;
+  animation-delay: 500ms;
+  animation-fill-mode: forwards;  // Stay at the finish frame
 }
 
 .subtitle-text {
@@ -152,8 +159,20 @@ export default class LandingView extends Vue {
     top: 100%;
     right: 50%;
     left: 50%;
-    bottom: 0%;
+    bottom: 0;
     transform: scale(0, 0) rotateZ(30deg);
   }
 }
+
+@keyframes float-up {
+  0% {
+    transform: translateY(2em);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 </style>
