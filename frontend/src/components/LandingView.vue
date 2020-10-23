@@ -2,8 +2,9 @@
   <div class="column container items-center absolute">
     <q-card flat bordered class="bg-card q-ma-lg bg-secondary">
       <moving-background class="absolute q-ma-"></moving-background>
-      <q-card-section class="q-mt-md text-center big-text text-primary text-weight-medium">
-        Upload Resumes, Analyze Skills and Get Jobs!
+      <q-card-section class="q-mt-md text-center text-primary">
+        <div class="big-text text-weight-medium">Job Scanner</div>
+        <div class="q-mt-md subtitle-text">Upload Resumes, Analyze Skills and Get Jobs!</div>
       </q-card-section>
       <div>
         <q-card
@@ -49,9 +50,12 @@
       </div>
     </q-card>
 
-    <q-card class="main-card" :class="isProcessingStep ? 'enlarge' : ''">
+    <q-card class="main-card" :class="isUploadingStep ? 'enlarge' : ''">
       <q-card-section class="q-ma-md absolute-full">
-        <upload-view @onProcessing="isProcessingStep = true"></upload-view>
+        <upload-view
+          @onUploading="currentStep = 'uploading'"
+          @onProcessing="currentStep = 'processing'">
+        </upload-view>
       </q-card-section>
     </q-card>
   </div>
@@ -60,13 +64,21 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import UploadView from 'components/UploadView.vue'
-import MovingBackground from "components/MovingBackground.vue";
+import MovingBackground from 'components/MovingBackground.vue'
 
 @Component({
-  components: {MovingBackground, UploadView }
+  components: { MovingBackground, UploadView }
 })
 export default class LandingView extends Vue {
-  isProcessingStep = false
+  currentStep = ''
+
+  get isProcessingStep () {
+    return this.currentStep === 'processing'
+  }
+
+  get isUploadingStep () {
+    return this.currentStep === 'uploading'
+  }
 }
 </script>
 
@@ -89,7 +101,7 @@ export default class LandingView extends Vue {
   min-height: 14em;
   border-radius: 1.5em;
   box-shadow: 0px 5px 20px 2px #c3c3c34d;
-  transition: all 500ms;
+  transition: all 800ms cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack */
 
   &.enlarge {
     transform: scale(1.1);
@@ -117,6 +129,10 @@ export default class LandingView extends Vue {
 
 .big-text {
   font-size: x-large;
+}
+
+.subtitle-text {
+  font-size: medium;
 }
 
 @keyframes buyoo-buyoo {

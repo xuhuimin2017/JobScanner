@@ -7,6 +7,7 @@
     >
       <q-file
         v-model="file"
+        class="non-selectable"
         label="Browse files"
         outlined
         dense
@@ -137,6 +138,9 @@ export default class UploadView extends Vue {
   onStep () {
     if (this.isStageProcessing) {
       this.$emit('onProcessing')
+    }
+    if (this.isStageUploading) {
+      this.$emit('onUploading')
     }
   }
 

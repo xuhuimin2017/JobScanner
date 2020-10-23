@@ -49,7 +49,7 @@ ul {
   list-style: none;
   width: 20px;
   height: 20px;
-  background: rgba(53, 154, 208, 0.18);
+  background: #4fc1ff26;
   animation: animate 30s linear infinite;
   bottom: -150px;
 }
