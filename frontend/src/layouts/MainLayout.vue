@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-import {openInNewTab} from "src/utils/dom";
+import { openInNewTab } from 'src/utils/dom'
 
 @Component
 export default class MainLayout extends Vue {
@@ -44,7 +44,7 @@ export default class MainLayout extends Vue {
     }
   }
 
-  openGithub() {
+  openGithub () {
     openInNewTab('https://github.com/wenoptics/JobScanner')
   }
 }

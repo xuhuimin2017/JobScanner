@@ -8,43 +8,39 @@
       </q-card-section>
       <div>
         <q-card
-          class="icon-card"
+          class="icon-card animate-scale-show-enter"
           :class="isProcessingStep ? 'moving-to-center' : ''"
           style="top:35%; left:4%; animation-delay: 200ms;"
         >
           <q-card-section>
-            <q-icon size="5em" name="img:icon-content/cv.svg">
-            </q-icon>
+            <q-icon size="5em" name="img:icon-content/cv.svg"></q-icon>
           </q-card-section>
         </q-card>
         <q-card
-          class="icon-card"
+          class="icon-card animate-scale-show-enter"
           :class="isProcessingStep ? 'moving-to-center' : ''"
           style="bottom:8%; left:14%; animation-delay: 500ms;"
         >
           <q-card-section>
-            <q-icon size="2.9em" name="img:icon-content/cv-cv.svg">
-            </q-icon>
+            <q-icon size="2.9em" name="img:icon-content/cv-cv.svg"></q-icon>
           </q-card-section>
         </q-card>
         <q-card
-          class="icon-card"
+          class="icon-card animate-scale-show-enter"
           :class="isProcessingStep ? 'moving-to-center' : ''"
           style="top:26%; right: 2%; animation-delay: 700ms;"
         >
           <q-card-section>
-            <q-icon size="2.5em" name="img:icon-content/recruitment.svg">
-            </q-icon>
+            <q-icon size="2.5em" name="img:icon-content/recruitment.svg"></q-icon>
           </q-card-section>
         </q-card>
         <q-card
-          class="icon-card"
+          class="icon-card animate-scale-show-enter"
           :class="isProcessingStep ? 'moving-to-center' : ''"
           style="bottom:14%; right: 12%; animation-delay: 000ms;"
         >
           <q-card-section>
-            <q-icon size="4em" name="img:icon-content/portfolio.svg">
-            </q-icon>
+            <q-icon size="4em" name="img:icon-content/portfolio.svg"></q-icon>
           </q-card-section>
         </q-card>
       </div>
@@ -113,9 +109,12 @@ export default class LandingView extends Vue {
   border-radius: 1.75em;
   border-width: 0;
   box-shadow: 0 11px 12px 0 #a7edff55;
-  animation: buyoo-buyoo infinite 1.5s;
+  animation: buyoo-buyoo infinite, bubble-scale infinite;
+  animation-duration: 1.5s, 3s;
+  transition: all 1s;
   :hover {
-    transform: scale(1.05, 1.05);
+    animation: swag-rotate 1s;
+    animation-timing-function: linear;
   }
 }
 
@@ -134,7 +133,15 @@ export default class LandingView extends Vue {
 .animate-float-enter {
   opacity: 0;
   animation: float-up 1000ms;
+  animation-delay: 1000ms;
+  animation-fill-mode: forwards;  // Stay at the finish frame
+}
+
+.animate-scale-show-enter {
+  transform: scale(0);
+  animation: scale-show 400ms;
   animation-delay: 500ms;
+  animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1.275); /* easeOutBack */;
   animation-fill-mode: forwards;  // Stay at the finish frame
 }
 
@@ -172,6 +179,44 @@ export default class LandingView extends Vue {
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes scale-show {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes bubble-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes swag-rotate {
+  0% {
+    transform: rotateZ(0);
+  }
+  33% {
+    transform: rotateZ(2deg);
+  }
+  66% {
+    transform: rotateZ(-2deg);
+  }
+  100% {
+    transform: rotateZ(0);
   }
 }
 
