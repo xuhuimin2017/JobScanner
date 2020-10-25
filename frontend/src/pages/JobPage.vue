@@ -1,22 +1,21 @@
 <template>
-  <q-page class="column items-center">
-    <div class="row no-wrap">
-      <listing-view
-        v-if="!isDetailShown"
-        ref="listingView"
-        :job-data-list="rcmJobList"
-        :my-skills="mySkills"
-        :small="isDetailShown"
-        @select="onSelectJob"
-      >
-      </listing-view>
-      <JDView
-        v-else
-        :job-data="rcmJobList[currentPreviewJdIdx]"
-        @close="isDetailShown = false"
-      ></JDView>
-    </div>
-  </q-page>
+  <div class="job-container row no-wrap">
+    <listing-view
+      ref="listingView"
+      :class="{'right-border': isDetailShown}"
+      :job-data-list="rcmJobList"
+      :my-skills="mySkills"
+      :briefView="isDetailShown"
+      :selected-index="currentPreviewJdIdx"
+      @select="onSelectJob"
+    >
+    </listing-view>
+    <JDView
+      v-if="isDetailShown"
+      :job-data="rcmJobList[currentPreviewJdIdx]"
+      @close="isDetailShown = false"
+    ></JDView>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,36 +23,34 @@ import ListingView from 'components/ListingView.vue'
 import JDView from 'components/JDView.vue'
 import { Vue, Component, Prop } from 'vue-property-decorator'
 
-// import sampleList from 'components/sample.json'
+import sampleBackendData from 'components/sample.json'
 import { RecommendationModel } from 'components/models'
+import { getIsDev } from 'src/utils/mode'
 
 @Component({
   components: { ListingView, JDView }
 })
 export default class UploadPage extends Vue {
-  @Prop({ type: Object, required: true }) readonly recommendationData!: RecommendationModel;
+  @Prop({ type: Object }) readonly recommendationData!: RecommendationModel;
 
   currentPreviewJdIdx: number | null = null
 
-  // @Watch('currentPreviewJdIdx')
-  // onCurrentIdxChange (val: string, oldVal: string) {
-  //   console.log('onchange')
-  //
-  //   // morph({
-  //   //   from: this.$refs.listingView,
-  //   //   onToggle,
-  //   //   duration: 500,
-  //   //   tween: true
-  //   // })
-  // }
+  get dataProxy () {
+    if (!this.recommendationData && getIsDev()) {
+      console.warn('Using debug data')
+      return sampleBackendData
+    } else {
+      // TODO show no data
+    }
+    return this.recommendationData
+  }
 
   get rcmJobList () {
-    // return sampleList
-    return this.recommendationData.jobs
+    return this.dataProxy.jobs
   }
 
   get mySkills () {
-    return this.recommendationData.mySkills
+    return this.dataProxy.mySkills
   }
 
   get isDetailShown () {
@@ -72,3 +69,14 @@ export default class UploadPage extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.job-container {
+  width: 70vw;
+  max-width: 80em;
+}
+
+.right-border {
+  border-right: solid 1px #a9a9a966;
+}
+</style>
