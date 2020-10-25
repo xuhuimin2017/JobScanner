@@ -41,7 +41,6 @@
           <q-item-label>Pay rate</q-item-label>
           <q-item-label caption lines="1">
             {{ jobData.pay_rate }}
-            {{ jobData.pay_rate }}
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -63,7 +62,7 @@
       </q-item>
     </q-card-section>
 
-    <q-separator inset />
+    <q-separator inset=""/>
 
     <q-card-section>
       <div class="text-body2">
@@ -118,3 +117,9 @@ export default class JDView extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.detail-container {
+  //transition: all 700ms;
+}
+</style>
