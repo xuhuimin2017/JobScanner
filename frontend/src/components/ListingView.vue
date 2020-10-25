@@ -110,7 +110,7 @@ export default class ListingView extends Vue {
 <style lang="scss" scoped>
 .list-container {
   width: 70vw;
-  max-width: 50em;
+  max-width: 80em;
   //transition: width 500ms ease;
 
   &.small{

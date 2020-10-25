@@ -3,7 +3,7 @@
 
     <q-page-container>
       <q-page class="column items-center">
-        <div class="container column items-center absolute">
+        <div class="container column items-center absolute" :class="{ 'content-mode': contentMode }">
 
           <div class="header full-width q-px-md">
             <q-toolbar class="bg-white text-grey-8">
@@ -69,7 +69,7 @@
             </q-card-section>
           </q-card>
 
-          <div class="footer absolute-bottom text-primary non-selectable text-center q-pa-md">
+          <div class="footer relative-position text-primary non-selectable text-center q-pa-md">
             <span class="footer-credit" @mouseenter="heartSuffix=''" @mouseleave="heartSuffix='-outline'">
               <q-icon :name="'mdi-heart'+heartSuffix"></q-icon>
               Created by <a href="#">Guangxue Wen</a>, <a href="#">Huimin Xu</a>, <a href="#">Lingfei Wu</a>
@@ -92,6 +92,11 @@ import { openInNewTab } from 'src/utils/dom'
 export default class CardLayout extends Vue {
   currentStep = ''
   heartSuffix = '-outline'
+
+  get contentMode () {
+    console.log('this.$route', this.$route)
+    return this.$route.name === 'result'
+  }
 
   get style () {
     return {
@@ -177,6 +182,19 @@ export default class CardLayout extends Vue {
 
 .footer {
   bottom: 0;
+}
+
+.footer-credit {
+  a, a:link, a:visited {
+    color: $primary;
+    text-decoration-color: lighten($primary, 30%);
+    text-decoration-style: dotted;
+    transition: all 500ms;
+  }
+  a:hover {
+    text-decoration-color: lighten($primary, 0%);
+    //text-decoration-style: dashed;
+  }
 }
 
 .animate-float-enter {
