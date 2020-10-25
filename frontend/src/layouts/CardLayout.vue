@@ -5,7 +5,7 @@
       <q-page class="column items-center">
         <div class="container column items-center absolute" :class="{ 'content-mode': contentMode }">
 
-          <div class="header full-width q-px-md">
+          <div class="header q-py-sm full-width">
             <q-toolbar class="bg-white text-grey-8">
               <q-toolbar-title shrink class="row items-center no-wrap">
                 <q-btn no-caps rounded flat :ripple="false" size="1em" @click="$router.push({name: 'upload'})">
@@ -17,7 +17,7 @@
             </q-toolbar>
           </div>
 
-          <q-card flat bordered class="bg-card q-ma-lg bg-secondary">
+          <q-card flat bordered class="bg-card q-mb-lg bg-secondary">
             <moving-background class="absolute q-ma-"></moving-background>
             <q-card-section class="q-mt-md text-center text-primary">
               <div class="big-text text-weight-medium">Job Scanner</div>
@@ -27,7 +27,7 @@
               <q-card
                 class="icon-card animate-scale-show-enter"
                 :class="isProcessingStep ? 'moving-to-center' : ''"
-                style="top:35%; left:4%; animation-delay: 200ms;"
+                style="top:28%; left:4%; animation-delay: 200ms;"
               >
                 <q-card-section>
                   <q-icon size="5em" name="img:icon-content/cv.svg"></q-icon>
@@ -36,7 +36,7 @@
               <q-card
                 class="icon-card animate-scale-show-enter"
                 :class="isProcessingStep ? 'moving-to-center' : ''"
-                style="bottom:8%; left:14%; animation-delay: 500ms;"
+                style="bottom:8%; left:16%; animation-delay: 500ms;"
               >
                 <q-card-section>
                   <q-icon size="2.9em" name="img:icon-content/cv-cv.svg"></q-icon>

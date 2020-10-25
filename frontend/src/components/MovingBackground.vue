@@ -55,7 +55,7 @@ ul {
 }
 
 .circles li:nth-child(1){
-  left: 25%;
+  left: 15%;
   width: 80px;
   height: 80px;
   animation-delay: 0s;
@@ -96,6 +96,7 @@ ul {
   width: 110px;
   height: 110px;
   animation-delay: 3s;
+  animation-duration: 65s;
 }
 
 .circles li:nth-child(7){
