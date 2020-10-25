@@ -64,7 +64,7 @@
           </q-card>
 
           <q-card class="main-card" :class="isUploadingStep ? 'enlarge' : ''">
-            <q-card-section style="padding: 0">
+            <q-card-section style="padding: 0; overflow: hidden">
               <router-view />
             </q-card-section>
           </q-card>

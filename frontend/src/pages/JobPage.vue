@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <div class="job-container row no-wrap">
     <listing-view
-      v-if="!isDetailShown"
       ref="listingView"
+      :class="{'right-border': isDetailShown}"
       :job-data-list="rcmJobList"
       :my-skills="mySkills"
-      :small="isDetailShown"
+      :briefView="isDetailShown"
+      :selected-index="currentPreviewJdIdx"
       @select="onSelectJob"
     >
     </listing-view>
     <JDView
-      v-else
+      v-if="isDetailShown"
       :job-data="rcmJobList[currentPreviewJdIdx]"
       @close="isDetailShown = false"
     ></JDView>
@@ -68,3 +69,14 @@ export default class UploadPage extends Vue {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.job-container {
+  width: 70vw;
+  max-width: 80em;
+}
+
+.right-border {
+  border-right: solid 1px #a9a9a966;
+}
+</style>
