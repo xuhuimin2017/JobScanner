@@ -69,7 +69,7 @@
             </q-card-section>
           </q-card>
 
-          <div class="footer relative-position text-primary non-selectable text-center q-pa-md">
+          <div class="footer absolute-bottom text-primary non-selectable text-center q-pa-md">
             <span class="footer-credit" @mouseenter="heartSuffix=''" @mouseleave="heartSuffix='-outline'">
               <q-icon :name="'mdi-heart'+heartSuffix"></q-icon>
               Created by <a href="#">Guangxue Wen</a>, <a href="#">Huimin Xu</a>, <a href="#">Lingfei Wu</a>
@@ -143,6 +143,17 @@ export default class CardLayout extends Vue {
   }
 }
 
+$footer-height: 4.5em;
+
+.container {
+  min-height: 100vh;
+  padding-bottom: $footer-height;  // Make sure we always make some room for the footer
+}
+
+.footer {
+  height: $footer-height;
+}
+
 .container.content-mode {
   .bg-card {
     max-width: 80em;
@@ -178,10 +189,6 @@ export default class CardLayout extends Vue {
 
 .big-text {
   font-size: x-large;
-}
-
-.footer {
-  bottom: 0;
 }
 
 .footer-credit {
