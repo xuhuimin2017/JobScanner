@@ -13,7 +13,13 @@
                 </q-btn>
               </q-toolbar-title>
               <q-space />
-              <q-btn round dense flat color="text-grey-7" icon="mdi-github" @click="openGithub"></q-btn>
+              <q-btn-toggle
+                v-model="pageKey"
+                flat no-caps rounded
+                toggle-color="primary"
+                :options="pagesOption"
+              />
+              <!--<q-btn round dense flat color="text-grey-7" icon="mdi-github" @click="openGithub"></q-btn>-->
             </q-toolbar>
           </div>
 
@@ -92,6 +98,11 @@ import { openInNewTab } from 'src/utils/dom'
 export default class CardLayout extends Vue {
   currentStep = ''
   heartSuffix = '-outline'
+  pageKey = ''
+  pagesOption = [
+    { label: 'Team', value: 'team' },
+    { label: 'About', value: 'about' }
+  ]
 
   get contentMode () {
     console.log('this.$route', this.$route)
