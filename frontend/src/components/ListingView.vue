@@ -13,14 +13,68 @@
 
     <q-separator></q-separator>
     <q-list class="rounded-borders" :dense="briefView">
-      <q-item-label header>Your highlight skills</q-item-label>
+
+      <q-item-label header>Your projected income</q-item-label>
+      <q-item>
+        <q-item-section>
+          <div class="income-area">
+            <div
+              class="income-text absolute-center"
+              :class="{
+                'text-green': isSkillIncomeIncrease,
+                'text-red': !isSkillIncomeIncrease,
+              }"
+            >
+              <count-to
+                :start-val='lastIncomeVal'
+                :end-val='mock.income'
+                :duration='1000'
+                :decimals='2'
+                prefix='$ '
+                :autoplay=true>
+              </count-to>
+              <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top">
+                {{ (isSkillIncomeIncrease ? '+' : '') }} {{ Math.floor(lastIncomeVal - mock.originalIncome) }}
+              </q-badge>
+            </div>
+          </div>
+        </q-item-section>
+      </q-item>
+
+      <q-item-label header>
+        <div class="row no-wrap justify-between items-center">
+          <div>Your highlight skills</div>
+          <template v-if="!briefView">
+            <q-btn v-if="!skillEditing" rounded dense flat color="primary" @click="skillEditing = true">
+              <q-icon name="mdi-cog" class="q-mr-sm rotating"></q-icon>
+              Build your skills!
+            </q-btn>
+            <q-btn v-else label="Reset" rounded dense flat color="primary" icon="mdi-refresh"
+                   @click="skillEditing = false; onBuildReset()">
+            </q-btn>
+          </template>
+        </div>
+      </q-item-label>
       <q-item>
         <q-item-section>
           <q-item-label :lines="briefView ? 1 : 0">
-            <div class="multiline-tag">
-              <q-badge class="skill-tag q-mr-xs" color="primary" text-color="white" v-for="s in mySkills" :key="s">
-                {{ s }}
-              </q-badge>
+            <div class="row no-wrap q-gutter-lg">
+              <div class="multiline-tag" :class="{ 'col-6': skillEditing }">
+                <draggable v-model="skillSelected" group="skill" @end="onDragEnd">
+                  <q-badge class="skill-tag q-mr-xs" text-color="white" v-for="s in skillSelected" :key="s"
+                           :color="mySkills.includes(s) ? 'primary' : 'orange'">
+                    {{ s }}
+                  </q-badge>
+                </draggable>
+              </div>
+              <div class="multiline-tag" v-if="skillEditing && !briefView">
+                <draggable v-model="mock.skillPool" group="skill" @end="onDragEnd">
+                  <q-badge class="skill-tag q-mr-xs" text-color="white" v-for="s in mock.skillPool" :key="s"
+                           :color="mySkills.includes(s) ? 'primary' : 'orange'">
+                    {{ s }}
+                  </q-badge>
+                </draggable>
+              </div>
             </div>
           </q-item-label>
         </q-item-section>
@@ -100,13 +154,50 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { JobData } from 'components/models'
 import { formatDescription, getNamedIcon } from 'components/processing'
+import countTo from 'vue-count-to'
+import draggable from 'vuedraggable'
 
-@Component
+@Component({
+  components: {
+    countTo, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+    draggable
+  }
+})
 export default class ListingView extends Vue {
   @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
   @Prop({ type: Array }) readonly mySkills?: [string];
   @Prop({ type: Boolean, default: false }) readonly briefView?: boolean;
   @Prop({ type: Number, default: null }) readonly selectedIndex?: number;
+
+  mock = {
+    income: 0,
+    originalIncome: 0,
+    skillPool: ['APIs', 'Python', 'Azure', 'TensorFlow', 'C++', 'AutoCAD', 'Internet']
+  };
+
+  mounted () {
+    this.$set(this, 'skillSelected', this.mySkills)
+    this.onDragEnd()
+    this.mock.originalIncome = this.mock.income
+  }
+
+  skillEditing = false
+  skillSelected = []
+  drag = false
+  lastIncomeVal = 0
+
+  get isSkillIncomeIncrease () {
+    return this.lastIncomeVal - this.mock.originalIncome > 0
+  }
+
+  onBuildReset () {
+    this.mock.income = this.mock.originalIncome
+  }
+
+  onDragEnd () {
+    this.lastIncomeVal = this.mock.income
+    this.mock.income = this.skillSelected.length * 110 + 90000
+  }
 
   getNamedIcon (job: JobData) {
     return getNamedIcon(job)
@@ -142,9 +233,43 @@ export default class ListingView extends Vue {
     //transform: scale(1.02);
     opacity: 0.9;
   }
+  cursor: grab;
+  &.moving {
+    cursor: grabbing;
+  }
 }
 
 .select-highlight {
   background: lighten($primary, 42%);
+}
+
+.income-text {
+  font-size: xx-large;
+}
+
+.income-area {
+  height: 5em;
+}
+
+.brief-view {
+  .income-text {
+    font-size: large;
+  }
+  .income-area {
+    height: 3em;
+  }
+}
+
+.rotating {
+  animation: rotation 4s infinite linear
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
 }
 </style>
