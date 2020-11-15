@@ -34,7 +34,7 @@
                 :autoplay=true>
               </count-to>
               <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top">
-                {{ (isSkillIncomeIncrease ? '+' : '') }} {{ Math.floor(lastIncomeVal - mock.originalIncome) }}
+                {{ (isSkillIncomeIncrease ? '↑' : '↓') }} ${{ Math.floor(lastIncomeVal - mock.originalIncome) }}
               </q-badge>
             </div>
           </div>
@@ -55,24 +55,33 @@
           </template>
         </div>
       </q-item-label>
+
       <q-item>
         <q-item-section>
           <q-item-label :lines="briefView ? 1 : 0">
             <div class="row no-wrap q-gutter-lg">
               <div class="multiline-tag" :class="{ 'col-6': skillEditing }">
-                <draggable v-model="skillSelected" group="skill" @end="onDragEnd">
+                <draggable
+                  v-model="skillSelected"
+                  v-bind="dragOptions"
+                  @end="onDragEnd"
+                >
+                  <transition-group type="transition">
                   <q-badge class="skill-tag q-mr-xs" text-color="white" v-for="s in skillSelected" :key="s"
                            :color="mySkills.includes(s) ? 'primary' : 'orange'">
                     {{ s }}
                   </q-badge>
+                  </transition-group>
                 </draggable>
               </div>
               <div class="multiline-tag" v-if="skillEditing && !briefView">
-                <draggable v-model="mock.skillPool" group="skill" @end="onDragEnd">
+                <draggable v-model="mock.skillPool" v-bind="dragOptions" @end="onDragEnd">
+                  <transition-group type="transition">
                   <q-badge class="skill-tag q-mr-xs" text-color="white" v-for="s in mock.skillPool" :key="s"
                            :color="mySkills.includes(s) ? 'primary' : 'orange'">
                     {{ s }}
                   </q-badge>
+                  </transition-group>
                 </draggable>
               </div>
             </div>
@@ -169,6 +178,14 @@ export default class ListingView extends Vue {
   @Prop({ type: Boolean, default: false }) readonly briefView?: boolean;
   @Prop({ type: Number, default: null }) readonly selectedIndex?: number;
 
+  get dragOptions () {
+    return {
+      animation: 200,
+      group: 'skill',
+      disabled: false
+    }
+  }
+
   mock = {
     income: 0,
     originalIncome: 0,
@@ -228,7 +245,7 @@ export default class ListingView extends Vue {
 }
 
 .skill-tag {
-  transition: all 300ms;
+  //transition: all 300ms;
   &:hover {
     //transform: scale(1.02);
     opacity: 0.9;
