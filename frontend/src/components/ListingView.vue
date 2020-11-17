@@ -72,63 +72,70 @@
 
       <q-item-label header>Top recommendations</q-item-label>
 
-      <div v-for="(job, idx) in jobDataList" :key="idx">
-        <q-item
-          clickable
-          @click="cmdSelect(idx)"
-          :active="selectedIndex===idx"
-          active-class="select-highlight"
-        >
-          <q-item-section avatar>
-            <q-avatar rounded color="secondary">
-              {{ getNamedIcon(job) }}
-            </q-avatar>
-          </q-item-section>
-
-          <template v-if="!briefView">
-            <q-item-section top class="col-3">
-              <q-item-label class="q-mt-sm">{{ job.company }}</q-item-label>
-              <q-item-label lines="1">
-                <span class="text-weight-thin">{{ job.location }}</span>
-              </q-item-label>
+      <div class="relative-position">
+        <div v-for="(job, idx) in jobDataList" :key="idx">
+          <q-item
+            clickable
+            @click="cmdSelect(idx)"
+            :active="selectedIndex===idx"
+            active-class="select-highlight"
+            :disable="skillEditing"
+          >
+            <q-item-section avatar>
+              <q-avatar rounded color="secondary">
+                {{ getNamedIcon(job) }}
+              </q-avatar>
             </q-item-section>
-            <q-item-section top>
-              <q-item-label lines="1">
-                <span class="text-weight-medium">{{ job.name }}</span>
-                <span class="text-grey-8"> - {{ job.type }}</span>
-              </q-item-label>
-              <q-item-label caption lines="2">
-                {{ getDescription(job) }}
-              </q-item-label>
-              <q-item-label lines="1">
-                <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills" :key="s">
-                  {{ s }}
-                </q-badge>
-              </q-item-label>
+
+            <template v-if="!briefView">
+              <q-item-section top class="col-3">
+                <q-item-label class="q-mt-sm">{{ job.company }}</q-item-label>
+                <q-item-label lines="1">
+                  <span class="text-weight-thin">{{ job.location }}</span>
+                </q-item-label>
+              </q-item-section>
+              <q-item-section top>
+                <q-item-label lines="1">
+                  <span class="text-weight-medium">{{ job.name }}</span>
+                  <span class="text-grey-8"> - {{ job.type }}</span>
+                </q-item-label>
+                <q-item-label caption lines="2">
+                  {{ getDescription(job) }}
+                </q-item-label>
+                <q-item-label lines="1">
+                  <q-badge color="primary" text-color="white" class="q-mr-xs" v-for="s in job.skills" :key="s">
+                    {{ s }}
+                  </q-badge>
+                </q-item-label>
+              </q-item-section>
+            </template>
+
+            <template v-else>
+              <q-item-section top>
+                <q-item-label lines="1" class="text-weight-medium">{{ job.name }}</q-item-label>
+                <q-item-label lines="1" class="text-weight-light">{{ job.type }}</q-item-label>
+                <q-item-label lines="1">{{ job.company }}</q-item-label>
+              </q-item-section>
+            </template>
+
+            <q-item-section top side>
+              <div class="text-grey-8 q-gutter-xs">
+                <q-btn
+                  class="gt-xs" size="12px" flat dense round icon="mdi-star-outline"
+                  disable
+                  @click.stop=""
+                />
+              </div>
             </q-item-section>
-          </template>
+          </q-item>
 
-          <template v-else>
-            <q-item-section top>
-              <q-item-label lines="1" class="text-weight-medium">{{ job.name }}</q-item-label>
-              <q-item-label lines="1" class="text-weight-light">{{ job.type }}</q-item-label>
-              <q-item-label lines="1">{{ job.company }}</q-item-label>
-            </q-item-section>
-          </template>
+          <!-- Not showing the separator for the last one -->
+          <q-separator v-if="idx !== jobDataList.length - 1" :spaced="briefView?null:'sm'" />
+        </div>
 
-          <q-item-section top side>
-            <div class="text-grey-8 q-gutter-xs">
-              <q-btn
-                class="gt-xs" size="12px" flat dense round icon="mdi-star-outline"
-                disable
-                @click.stop=""
-              />
-            </div>
-          </q-item-section>
-        </q-item>
-
-        <!-- Not showing the separator for the last one -->
-        <q-separator v-if="idx !== jobDataList.length - 1" :spaced="briefView?null:'sm'" />
+        <q-inner-loading :showing="skillEditing">
+          <q-spinner-gears size="50px" color="primary"  />
+        </q-inner-loading>
       </div>
 
     </q-list>
