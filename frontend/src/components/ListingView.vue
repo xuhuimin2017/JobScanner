@@ -49,7 +49,7 @@
               <q-icon name="mdi-cog" class="q-mr-sm rotating"></q-icon>
               Build your skills!
             </q-btn>
-            <q-btn v-else label="Reset" rounded dense flat color="primary" icon="mdi-refresh"
+            <q-btn v-else label="Done" icon="mdi-check" rounded dense flat color="primary"
                    @click="skillEditing = false; onBuildReset()">
             </q-btn>
           </template>
@@ -59,63 +59,13 @@
       <q-item>
         <q-item-section>
           <q-item-label :lines="briefView ? 1 : 0">
-            <div class="row no-wrap q-gutter-lg skill-editor items-stretch" :class="{ skillEditing }">
-              <div class="multiline-tag" :class="{ 'col-6': skillEditing }">
-                <drop-list
-                  :items="skillSelected"
-                  mode="cut"
-                  @insert="onInsertSkill(skillSelected, $event)"
-                  class="draggable-container full-height"
-                  @reorder="$event.apply(skillSelected)"
-                >
-                  <template v-slot:item="{item}">
-                    <drag class="draggable" :key="item" :data="item" @cut="removeSkill(skillSelected, item)">
-                      <q-badge
-                        class="skill-tag q-mr-xs"
-                        text-color="white"
-                        :color="mySkills.includes(item) ? 'primary' : 'orange'">{{ item }}</q-badge>
-                    </drag>
-                  </template>
-                  <template v-slot:feedback="{data}">
-                    <div class="draggable feedback" :key="data">
-                      <q-badge
-                        class="skill-tag q-mr-xs"
-                        text-color="white"
-                        outline
-                        :color="mySkills.includes(data) ? 'primary' : 'orange'">{{ data }}</q-badge>
-                    </div>
-                  </template>
-                </drop-list>
-              </div>
-
-              <div class="multiline-tag" v-if="skillEditing && !briefView">
-                <drop-list
-                  :items="mock.skillPool"
-                  mode="cut"
-                  class="draggable-container full-height"
-                  @insert="onInsertSkill(mock.skillPool, $event)"
-                  @reorder="$event.apply(mock.skillPool)"
-                >
-                  <template v-slot:item="{item}">
-                    <drag class="draggable" :key="item" :data="item" @cut="removeSkill(mock.skillPool, item)">
-                      <q-badge
-                        class="skill-tag q-mr-xs"
-                        text-color="white"
-                        :color="mySkills.includes(item) ? 'primary' : 'orange'">{{ item }}</q-badge>
-                    </drag>
-                  </template>
-                  <template v-slot:feedback="{data}">
-                    <div class="draggable feedback" :key="data">
-                      <q-badge
-                        class="skill-tag q-mr-xs"
-                        text-color="white"
-                        outline
-                        :color="mySkills.includes(data) ? 'primary' : 'orange'">{{ data }}</q-badge>
-                    </div>
-                  </template>
-                </drop-list>
-              </div>
-            </div>
+            <skill-editor
+              :skills="mySkills"
+              :skills-pool="mock.skillPool"
+              :brief-view="briefView"
+              :in-editing="skillEditing"
+              @update="onSkillEdit"
+            ></skill-editor>
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -193,16 +143,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { JobData } from 'components/models'
+import SkillEditor from 'components/SkillEditor.vue'
 import { formatDescription, getNamedIcon } from 'components/processing'
 import countTo from 'vue-count-to'
-import { Drag, DropList } from 'vue-easy-dnd'
-import { clone } from 'lodash'
 
 @Component({
   components: {
-    countTo, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-    Drag, // eslint-disable-line @typescript-eslint/no-unsafe-assignment
-    DropList // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+    SkillEditor,
+    countTo // eslint-disable-line @typescript-eslint/no-unsafe-assignment
   }
 })
 export default class ListingView extends Vue {
@@ -211,14 +159,6 @@ export default class ListingView extends Vue {
   @Prop({ type: Boolean, default: false }) readonly briefView?: boolean;
   @Prop({ type: Number, default: null }) readonly selectedIndex?: number;
 
-  get dragOptions () {
-    return {
-      animation: 200,
-      group: 'skill',
-      disabled: false
-    }
-  }
-
   mock = {
     income: 0,
     originalIncome: 0,
@@ -226,14 +166,11 @@ export default class ListingView extends Vue {
   };
 
   mounted () {
-    this.$set(this, 'skillSelected', clone(this.mySkills))
-    this.onEditSkill()
+    this.onSkillEdit(this.mySkills)
     this.mock.originalIncome = this.mock.income
   }
 
   skillEditing = false
-  skillSelected = []
-  drag = false
   lastIncomeVal = 0
 
   get isSkillIncomeIncrease () {
@@ -244,18 +181,9 @@ export default class ListingView extends Vue {
     this.mock.income = this.mock.originalIncome
   }
 
-  onInsertSkill<T> (list: Array<T>, event: {index, data}) {
-    list.splice(event.index, 0, event.data)
-  }
-
-  removeSkill<T> (list: Array<T>, obj: T) {
-    const index = list.indexOf(obj)
-    list.splice(index, 1)
-  }
-
-  onEditSkill () {
+  onSkillEdit (skillSelected: [string]) {
     this.lastIncomeVal = this.mock.income
-    this.mock.income = this.skillSelected.length * 110 + 90000
+    this.mock.income = skillSelected.length * 110 + 90000
   }
 
   getNamedIcon (job: JobData) {
@@ -309,61 +237,6 @@ export default class ListingView extends Vue {
   }
   to {
     transform: rotate(359deg);
-  }
-}
-</style>
-
-<style lang="scss" scoped>
-.skill-tag {
-  margin-top: 0.2em;
-  &:hover {
-    //transform: scale(1.02);
-    opacity: 0.9;
-  }
-}
-
-.multiline-tag {
-  //line-height: 1.3em !important;
-}
-
-.skillEditing {
-  .draggable-container {
-    padding: 1em;
-    border: 0.5em dashed #c3c3ff66;
-  }
-  .skill-tag {
-    margin-bottom: 0.4em;
-    animation: swaggering 250ms infinite;
-    animation-timing-function: ease-in-out;
-  }
-}
-
-.skill-editor {}
-
-.draggable-container {
-  border: 0 dashed #c3c3ff66;
-  transition: all 700ms;
-}
-
-.draggable {
-  display: inline-flex;
-  flex-direction: column;
-}
-
-$m: 0.3px;
-$q: 1.8deg;
-@keyframes swaggering {
-  0% {
-    transform: rotateZ(0) translateY(0) translateX(0);
-  }
-  33% {
-    transform: rotateZ($q) translateY($m) translateX(-$m);
-  }
-  66% {
-    transform: rotateZ(-$q) translateY(-$m) translateX($m);
-  }
-  100% {
-    transform: rotateZ(0) translateY(0) translateX(0);
   }
 }
 </style>
