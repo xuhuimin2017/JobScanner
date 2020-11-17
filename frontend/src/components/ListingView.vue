@@ -169,11 +169,35 @@ export default class ListingView extends Vue {
   mock = {
     income: 0,
     originalIncome: 0,
-    skillPool: ['APIs', 'Python', 'Azure', 'TensorFlow', 'C++', 'AutoCAD', 'Internet']
+    skillPool: [
+      { name: 'MongoDB', type: '1' },
+      { name: 'PostgreSQL', type: '1' },
+      { name: 'Postman', type: '1' },
+      { name: 'CloudFlare', type: '1' },
+      { name: 'Google Drive Drive', type: '1' },
+      { name: 'Ubuntu', type: '1' },
+      { name: 'AngularJS', type: '1' },
+
+      { name: 'jQuery', type: '2' },
+      { name: 'Git', type: '2' },
+      { name: 'PHP', type: '2' },
+      { name: 'HTML5', type: '2' },
+      { name: 'NGINX', type: '2' },
+      { name: 'Slack', type: '2' },
+      { name: 'JavaScript', type: '2' },
+
+      { name: 'Sass', type: '3' },
+      { name: 'Google', type: '3' },
+      { name: 'IntelliJ', type: '3' },
+      { name: 'Webpack', type: '3' },
+      { name: 'Elasticsearch', type: '3' },
+      { name: 'Ruby', type: '3' },
+      { name: 'VirtualBox', type: '3' }
+    ]
   };
 
   mounted () {
-    this.onSkillEdit(this.mySkills)
+    this.onSkillEdit(this.mySkills || [])
     this.mock.originalIncome = this.mock.income
   }
 
@@ -188,7 +212,7 @@ export default class ListingView extends Vue {
     this.mock.income = this.mock.originalIncome
   }
 
-  onSkillEdit (skillSelected: [string]) {
+  onSkillEdit (skillSelected: [string] | []) {
     this.lastIncomeVal = this.mock.income
     this.mock.income = skillSelected.length * 110 + 90000
   }
