@@ -2,6 +2,10 @@
 
 A webapp for skill analysis and job hunting
 
+[Alpha Release](https://jobscanner-site.s3.us-east-2.amazonaws.com/index.html)
+
+[Internal Release](https://jobscanner-site-internal.s3.us-east-2.amazonaws.com/index.html)
+
 ## Install the dependencies
 ```bash
 yarn

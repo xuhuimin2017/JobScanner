@@ -11,7 +11,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "deploy:s3": "aws s3 sync dist/spa/. s3://jobscanner-site --delete"
+    "deploy:s3": "aws s3 sync dist/spa/. s3://jobscanner-site --delete",
+    "deploy:s3-internal": "aws s3 sync dist/spa/. s3://jobscanner-site-internal --delete"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
