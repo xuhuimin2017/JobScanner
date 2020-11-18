@@ -181,14 +181,8 @@ export default class SkillEditor extends Vue {
 .skill-tag {
   margin-top: 0.2em;
   &:hover {
-    //transform: scale(1.02);
     opacity: 0.9;
-    transform: scale(1.1);
   }
-}
-
-.multiline-tag {
-  //line-height: 1.3em !important;
 }
 
 .allowEdit {

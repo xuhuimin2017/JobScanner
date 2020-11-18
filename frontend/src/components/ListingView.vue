@@ -43,7 +43,16 @@
 
       <q-item-label header>
         <div class="row no-wrap items-baseline justify-between items-center">
-          <div v-if="skillEditing">Skill Editor</div>
+          <div v-if="skillEditing">
+            Skill Editor
+            <transition appear name="help-attention">
+            <q-btn icon="mdi-help-circle-outline" round size="sm" flat :ripple="false">
+              <q-tooltip content-class="bg-indigo" content-style="font-size: 1em" :offset="[10, 10]">
+                Found out what you worth with some new skills! Try adding some new skills from the Skill Market.
+              </q-tooltip>
+            </q-btn>
+            </transition>
+          </div>
           <div v-else>{{ briefView ? 'Your skills' : 'Your highlight skills' }}</div>
           <div class="content-end" v-if="!briefView">
             <transition
@@ -52,7 +61,16 @@
               enter-active-class="animated fadeInRight"
               leave-active-class="animated fadeOutRight"
             >
-              <q-btn v-if="!skillEditing" class="btn-edit" key="btn-1" rounded dense flat color="primary" @click="skillEditing = true">
+              <q-btn
+                v-if="!skillEditing"
+                class="btn-edit"
+                key="btn-1"
+                rounded
+                dense
+                flat
+                color="primary"
+                @click="skillEditing = true"
+              >
                 <q-icon name="mdi-cog" class="q-mr-sm rotating"></q-icon>
                 Build your skills!
               </q-btn>
@@ -64,7 +82,7 @@
                 rounded
                 dense
                 flat
-                color="primary"
+                color="positive"
                 @click="skillEditing = false; onBuildReset()"
               ></q-btn>
             </transition>
@@ -289,5 +307,10 @@ export default class ListingView extends Vue {
   to {
     transform: rotate(359deg);
   }
+}
+
+.help-attention-enter-active {
+  animation: rubberBand 2s;
+  animation-delay: 1s;
 }
 </style>
