@@ -33,7 +33,7 @@
                 prefix='$ '
                 :autoplay=true>
               </count-to>
-              <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top">
+              <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top" v-if="!briefView">
                 {{ (isSkillIncomeIncrease ? '↑' : '↓') }} ${{ Math.floor(lastIncomeVal - mock.originalIncome) }}
               </q-badge>
             </div>
@@ -42,17 +42,33 @@
       </q-item>
 
       <q-item-label header>
-        <div class="row no-wrap justify-between items-center">
-          <div>Your highlight skills</div>
-          <template v-if="!briefView">
-            <q-btn v-if="!skillEditing" rounded dense flat color="primary" @click="skillEditing = true">
-              <q-icon name="mdi-cog" class="q-mr-sm rotating"></q-icon>
-              Build your skills!
-            </q-btn>
-            <q-btn v-else label="Done" icon="mdi-check" rounded dense flat color="primary"
-                   @click="skillEditing = false; onBuildReset()">
-            </q-btn>
-          </template>
+        <div class="row no-wrap items-baseline justify-between items-center">
+          <div v-if="skillEditing">Skill Editor</div>
+          <div v-else>{{ briefView ? 'Your skills' : 'Your highlight skills' }}</div>
+          <div class="content-end" v-if="!briefView">
+            <transition
+              appear
+              mode="out-in"
+              enter-active-class="animated fadeInRight"
+              leave-active-class="animated fadeOutRight"
+            >
+              <q-btn v-if="!skillEditing" class="btn-edit" key="btn-1" rounded dense flat color="primary" @click="skillEditing = true">
+                <q-icon name="mdi-cog" class="q-mr-sm rotating"></q-icon>
+                Build your skills!
+              </q-btn>
+              <q-btn
+                v-else
+                key="btn-2"
+                label="Done"
+                icon="mdi-check"
+                rounded
+                dense
+                flat
+                color="primary"
+                @click="skillEditing = false; onBuildReset()"
+              ></q-btn>
+            </transition>
+          </div>
         </div>
       </q-item-label>
 
@@ -260,6 +276,10 @@ export default class ListingView extends Vue {
 
 .rotating {
   animation: rotation 4s infinite linear
+}
+
+.btn-edit:hover .rotating {
+  animation-duration: 2s;
 }
 
 @keyframes rotation {
