@@ -68,7 +68,7 @@ export function getIncomeFromSkills (skills: string[]) {
       }
     }).then(
     // eslint-disable-next-line camelcase
-    (respData): { wage: number; wage_contrib: any[]; skills_recommend: string[] } => {
+    (respData): { wage: number; wage_contrib: any[]; skills_recommend: [string, number][] } => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return respData.data
     }

@@ -54,7 +54,8 @@
             <transition appear name="help-attention">
             <q-btn icon="mdi-help-circle-outline" round size="sm" flat :ripple="false">
               <q-tooltip content-class="bg-indigo" content-style="font-size: 1em" :offset="[10, 10]">
-                Found out what you worth with some new skills! Try adding some new skills from the Skill Market.
+                Found out what you worth with some new skills!
+                <br> Try adding some new skills from the Skill Market.
               </q-tooltip>
             </q-btn>
             </transition>
@@ -228,33 +229,31 @@ export default class ListingView extends Vue {
   }
 
   async onSkillEdit (skillSelected: { name: string }[]) {
-    if (skillSelected) {
-      this.loading = true
-      await getIncomeFromSkills(skillSelected.map((i: { name: string }) => i.name))
-        .catch(err => console.error(err))
-        .then(data => {
-          console.log(data)
-          if (data) {
-            this.lastIncomeVal = this.currentProjectedWage
-            this.currentProjectedWage = data.wage
-            this.skillPool.splice(0, this.skillPool.length)
-            // console.log('data.skills_recommend', data.skills_recommend.map(i => ({ name: i[0], type: '1' })))
-            this.$set(this, 'skillPool', data.skills_recommend.map((i, idx) => {
-              if (idx < 7) {
-                return { name: i[0], type: '1' }
-              } else if (idx < 14) {
-                return { name: i[0], type: '2' }
-              } else {
-                return { name: i[0], type: '3' }
-              }
-            }))
-            console.log('this', this.skillPool)
-          }
-        })
-        .finally(() => {
-          this.loading = false
-        })
-    }
+    this.loading = true
+    await getIncomeFromSkills(skillSelected.map((i: { name: string }) => i.name))
+      .catch(err => console.error(err))
+      .then(data => {
+        console.log(data)
+        if (data) {
+          this.lastIncomeVal = this.currentProjectedWage
+          this.currentProjectedWage = data.wage
+          this.skillPool.splice(0, this.skillPool.length)
+          // console.log('data.skills_recommend', data.skills_recommend.map(i => ({ name: i[0], type: '1' })))
+          this.$set(this, 'skillPool', data.skills_recommend.map((i, idx) => {
+            if (idx < 7) {
+              return { name: i[0], type: '1' }
+            } else if (idx < 14) {
+              return { name: i[0], type: '2' }
+            } else {
+              return { name: i[0], type: '3' }
+            }
+          }))
+          console.log('this', this.skillPool)
+        }
+      })
+      .finally(() => {
+        this.loading = false
+      })
   }
 
   getNamedIcon (job: JobData) {

@@ -33,6 +33,7 @@
                 text-color="white"
                 :color="skillColor(item)">
                 {{ item.name }}
+                <!-- Skill removal button -->
                 <q-icon
                   v-if="allowEdit"
                   :name="hoverClose[item.name] ? 'mdi-close-circle' : 'mdi-close-circle-outline'"
@@ -42,7 +43,15 @@
                   @mousedown.stop
                   @mouseenter="$set(hoverClose, item.name, true)"
                   @mouseleave="$set(hoverClose, item.name, false)"
-                />
+                >
+                  <q-tooltip
+                    v-if="item.type === 'my-skill'"
+                    content-class="bg-purple"
+                    content-style="font-size: 0.8em"
+                    :offset="[10, 10]">
+                    Un-learn a skill? Try and find out how it would impact your projected wage
+                  </q-tooltip>
+                </q-icon>
               </q-badge>
             </drag>
           </template>
@@ -128,8 +137,8 @@ interface SkillType {
   }
 })
 export default class SkillEditor extends Vue {
-  @Prop({ type: Array }) readonly skills?: [string];
-  @Prop({ type: Array }) readonly skillsPool?: [SkillType];
+  @Prop({ type: Array }) readonly skills?: string[];
+  @Prop({ type: Array }) readonly skillsPool?: SkillType[];
   @Prop({ type: Boolean, default: false }) readonly briefView?: boolean;
   @Prop({ type: Boolean, default: false }) readonly inEditing?: boolean;
 
@@ -151,19 +160,9 @@ export default class SkillEditor extends Vue {
     list.splice(index, 1)
   }
 
-  @Watch('skillSelected')
-  updateCurrentSkill () {
-    this.$emit('update', this.skillSelected)
-  }
-
   onReset () {
     this.$set(this, 'skillSelected', clone(this.skills)?.map(i => ({ name: i, type: 'my-skill' })))
     this.$set(this, 'skillsPoolDirty', clone(this.skillsPool))
-  }
-
-  @Watch('child')
-  onSkillPoolChanged (val: string) {
-    this.$set(this, 'skillsPoolDirty', clone(val))
   }
 
   skillColor (skill: SkillType) {
@@ -174,6 +173,17 @@ export default class SkillEditor extends Vue {
       case '3': return 'orange-6'
     }
     return 'orange'
+  }
+
+  @Watch('skillSelected')
+  updateCurrentSkill () {
+    this.$emit('update', this.skillSelected)
+  }
+
+  @Watch('skillsPool')
+  onSkillPoolChanged (val: string) {
+    console.log('updating whole skillsPool')
+    this.$set(this, 'skillsPoolDirty', clone(val))
   }
 
   get allowEdit () {
