@@ -34,7 +34,7 @@
                 :color="skillColor(item)">
                 {{ item.name }}
                 <q-icon
-                  v-if="allowEdit && item.type !== 'my-skill'"
+                  v-if="allowEdit"
                   :name="hoverClose[item.name] ? 'mdi-close-circle' : 'mdi-close-circle-outline'"
                   color="white"
                   class="q-ml-xs cursor-pointer"
@@ -137,8 +137,8 @@ export default class SkillEditor extends Vue {
     this.onReset()
   }
 
-  skillSelected: [SkillType] | [] = []
-  skillsPoolDirty: [SkillType] | [] = []
+  skillSelected: SkillType[] = []
+  skillsPoolDirty: SkillType[] = []
   hoverClose = {}
   hoverSkillLoading = {}
 
@@ -159,6 +159,11 @@ export default class SkillEditor extends Vue {
   onReset () {
     this.$set(this, 'skillSelected', clone(this.skills)?.map(i => ({ name: i, type: 'my-skill' })))
     this.$set(this, 'skillsPoolDirty', clone(this.skillsPool))
+  }
+
+  @Watch('child')
+  onSkillPoolChanged (val: string) {
+    this.$set(this, 'skillsPoolDirty', clone(val))
   }
 
   skillColor (skill: SkillType) {

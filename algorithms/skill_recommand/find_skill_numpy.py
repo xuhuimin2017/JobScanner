@@ -1,7 +1,13 @@
+from pathlib import Path
+
 import numpy as np
 import argparse
 import json 
 import re
+
+_path_cur = Path(__file__).absolute().resolve().parent
+_path_param_mix = _path_cur / 'Parameters_mix.json'
+_path_weight = _path_cur / 'Weight.txt'
 
 
 def get_skill_vec(skills,vecs):
@@ -46,7 +52,7 @@ def leakyrelu(x,slope=0.1):
   x[x<0]=x[x<0]*slope
   return np.matrix(x)
 
-with open('Parameters_mix.json','r')as f:
+with open(_path_param_mix,'r')as f:
   SD = json.load(f)
 
 def NN(x,SD):
@@ -70,7 +76,7 @@ def skill_contributes(skills,vecs):
         skill_vecs = []
         skill_vecs_d = {}
         n=0
-        W = np.loadtxt('Weight.txt')
+        W = np.loadtxt(str(_path_weight))
         for skill in skills:
             for word in re.split('-|/', skill):
                 if word in vecs:
@@ -111,15 +117,17 @@ def skill_contributes(skills,vecs):
             tmp = {t:tmp[t]/s for t in tmp}
     return tmp
     
-parser = argparse.ArgumentParser(description='learn the high paid skill')
-parser.add_argument('--skill_choosen', type=str, default='./skill_choosen.txt',
-                    help='a file that gives the all of the skill')
-parser.add_argument('--current_skill', nargs='+',
-                    help=' current skill u own')
 
-parser.add_argument('--embedding_fpath', default='./glove/glove.twitter.27B.25d.txt')
-parser.add_argument('--topn',default=3,type=int)
 if __name__=='__main__':
+    parser = argparse.ArgumentParser(description='learn the high paid skill')
+    parser.add_argument('--skill_choosen', type=str, default='./skill_choosen.txt',
+                        help='a file that gives the all of the skill')
+    parser.add_argument('--current_skill', nargs='+',
+                        help=' current skill u own')
+
+    parser.add_argument('--embedding_fpath', default='./glove/glove.twitter.27B.25d.txt')
+    parser.add_argument('--topn', default=3, type=int)
+
     args = parser.parse_args()
     embedding_fpath = args.embedding_fpath
     topn = int(args.topn)

@@ -55,3 +55,22 @@ export function getJobsFromResume (fileId: string) {
     }
   )
 }
+
+export function getIncomeFromSkills (skills: string[]) {
+  console.log('getIncomeFromSkills skills', skills)
+  return axios.post(
+    'http://localhost:5000/getIncomeFromSkills',
+    { skills: skills },
+    {
+      headers: {
+        // 'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    }).then(
+    // eslint-disable-next-line camelcase
+    (respData): { wage: number; wage_contrib: any[]; skills_recommend: string[] } => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return respData.data
+    }
+  )
+}

@@ -25,17 +25,23 @@
                 'text-red': !isSkillIncomeIncrease,
               }"
             >
-              <count-to
-                :start-val='lastIncomeVal'
-                :end-val='mock.income'
-                :duration='1000'
-                :decimals='2'
-                prefix='$ '
-                :autoplay=true>
-              </count-to>
-              <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top" v-if="!briefView">
-                {{ (isSkillIncomeIncrease ? '↑' : '↓') }} ${{ Math.floor(lastIncomeVal - mock.originalIncome) }}
-              </q-badge>
+              <template v-if="!loading">
+                <count-to
+                  :start-val='lastIncomeVal'
+                  :end-val='currentProjectedWage'
+                  :duration='1000'
+                  :decimals='2'
+                  prefix='$ '
+                  :autoplay=true
+                >
+                </count-to>
+                <q-badge :color="isSkillIncomeIncrease ? 'green' : 'red'" align="top" v-if="!briefView">
+                  {{ (isSkillIncomeIncrease ? '↑' : '↓') }} ${{ Math.floor(lastIncomeVal - initProjectedWage) }}
+                </q-badge>
+              </template>
+              <template v-else>
+                <q-spinner size="sm"></q-spinner>
+              </template>
             </div>
           </div>
         </q-item-section>
@@ -95,7 +101,7 @@
           <q-item-label :lines="briefView ? 1 : 0">
             <skill-editor
               :skills="mySkills"
-              :skills-pool="mock.skillPool"
+              :skills-pool="skillPool"
               :brief-view="briefView"
               :in-editing="skillEditing"
               @update="onSkillEdit"
@@ -187,6 +193,7 @@ import { JobData } from 'components/models'
 import SkillEditor from 'components/SkillEditor.vue'
 import { formatDescription, getNamedIcon } from 'components/processing'
 import countTo from 'vue-count-to'
+import { getIncomeFromSkills } from 'src/api/app'
 
 @Component({
   components: {
@@ -196,59 +203,58 @@ import countTo from 'vue-count-to'
 })
 export default class ListingView extends Vue {
   @Prop({ type: Array, required: true }) readonly jobDataList!: [JobData];
-  @Prop({ type: Array }) readonly mySkills?: [string];
+  @Prop({ type: Array, default: [] }) readonly mySkills!: [string];
   @Prop({ type: Boolean, default: false }) readonly briefView?: boolean;
   @Prop({ type: Number, default: null }) readonly selectedIndex?: number;
 
-  mock = {
-    income: 0,
-    originalIncome: 0,
-    skillPool: [
-      { name: 'MongoDB', type: '1' },
-      { name: 'PostgreSQL', type: '1' },
-      { name: 'Postman', type: '1' },
-      { name: 'CloudFlare', type: '1' },
-      { name: 'Google Drive Drive', type: '1' },
-      { name: 'Ubuntu', type: '1' },
-      { name: 'AngularJS', type: '1' },
-
-      { name: 'jQuery', type: '2' },
-      { name: 'Git', type: '2' },
-      { name: 'PHP', type: '2' },
-      { name: 'HTML5', type: '2' },
-      { name: 'NGINX', type: '2' },
-      { name: 'Slack', type: '2' },
-      { name: 'JavaScript', type: '2' },
-
-      { name: 'Sass', type: '3' },
-      { name: 'Google', type: '3' },
-      { name: 'IntelliJ', type: '3' },
-      { name: 'Webpack', type: '3' },
-      { name: 'Elasticsearch', type: '3' },
-      { name: 'Ruby', type: '3' },
-      { name: 'VirtualBox', type: '3' }
-    ]
-  };
-
-  mounted () {
-    this.onSkillEdit(this.mySkills || [])
-    this.mock.originalIncome = this.mock.income
+  async mounted () {
+    await this.onSkillEdit(this.mySkills.map(i => ({ name: i })))
+    this.initProjectedWage = this.currentProjectedWage
   }
 
+  loading = false
+  initProjectedWage = 0
+  currentProjectedWage = 0
   skillEditing = false
   lastIncomeVal = 0
+  skillPool: { name: string, type: string }[] = []
 
   get isSkillIncomeIncrease () {
-    return this.lastIncomeVal - this.mock.originalIncome > 0
+    return this.lastIncomeVal - this.initProjectedWage > 0
   }
 
   onBuildReset () {
-    this.mock.income = this.mock.originalIncome
+    this.currentProjectedWage = this.initProjectedWage
   }
 
-  onSkillEdit (skillSelected: [string] | []) {
-    this.lastIncomeVal = this.mock.income
-    this.mock.income = skillSelected.length * 110 + 90000
+  async onSkillEdit (skillSelected: { name: string }[]) {
+    if (skillSelected) {
+      this.loading = true
+      await getIncomeFromSkills(skillSelected.map((i: { name: string }) => i.name))
+        .catch(err => console.error(err))
+        .then(data => {
+          console.log(data)
+          if (data) {
+            this.lastIncomeVal = this.currentProjectedWage
+            this.currentProjectedWage = data.wage
+            this.skillPool.splice(0, this.skillPool.length)
+            // console.log('data.skills_recommend', data.skills_recommend.map(i => ({ name: i[0], type: '1' })))
+            this.$set(this, 'skillPool', data.skills_recommend.map((i, idx) => {
+              if (idx < 7) {
+                return { name: i[0], type: '1' }
+              } else if (idx < 14) {
+                return { name: i[0], type: '2' }
+              } else {
+                return { name: i[0], type: '3' }
+              }
+            }))
+            console.log('this', this.skillPool)
+          }
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    }
   }
 
   getNamedIcon (job: JobData) {

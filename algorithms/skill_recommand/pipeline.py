@@ -1,4 +1,5 @@
 from pathlib import Path
+from pprint import pprint
 from typing import List
 
 import numpy as np
@@ -27,19 +28,23 @@ def find_skills(current_skill: List[str], top_n: int):
     predict = np.array(predict).reshape(-1)
 
     res = sorted([[i, j] for i, j in zip(skill_chosen, predict)], key=lambda x: x[1], reverse=True)
-    tmp1 = alg.skill_contributes(current_skill, vecs)
-    print('Current Skills (Contribution Weight): ', tmp1)
+    wage_contrib = alg.skill_contributes(current_skill, vecs)
+    print('Current Skills (Contribution Weight): ', wage_contrib)
+    old_wage = np.exp(float(old_wage)) * 40 * 50
     print('Current Predicted Wage: ', old_wage)
+    print('Top n skill', res[:top_n])
     print('=' * 10)
-    for i in range(top_n):
-        new_skill_name = res[i][0]
-        new_wage = res[i][1]
-        print('Add ', new_skill_name)
-        tmpi = alg.skill_contributes(current_skill + [new_skill_name], vecs)
-        print('Contribution Weight', tmpi)
-        print('New wage: ', new_wage)
-        print('=' * 10)
+    # for i in range(top_n):
+    #     new_skill_name = res[i][0]
+    #     new_wage = res[i][1]
+    #     print('Add ', new_skill_name)
+    #     tmpi = alg.skill_contributes(current_skill + [new_skill_name], vecs)
+    #     print('Contribution Weight', tmpi)
+    #     print('New wage: ', new_wage)
+    #     print('=' * 10)
+    return old_wage, wage_contrib, res[:top_n]
 
 
 if __name__ == '__main__':
-    find_skills(['adobe-photoshop', 'adobe-dreamweaver', 'log-design', 'css3', 'html5'], 5)
+    ret = find_skills(['adobe-photoshop', 'adobe-dreamweaver', 'log-design', 'css3', 'html5'], 5)
+    pprint(ret, indent=2, width=80, compact=False)

@@ -9,7 +9,7 @@
             <q-toolbar class="bg-white text-grey-8">
               <q-toolbar-title shrink class="row items-center no-wrap">
                 <q-btn no-caps rounded flat :ripple="false" size="1em" @click="$router.push({name: 'upload'})">
-                  Transforma
+                  Skill Lab
                 </q-btn>
               </q-toolbar-title>
               <q-space />
@@ -26,7 +26,7 @@
           <q-card flat bordered class="bg-card q-mb-lg bg-secondary">
             <moving-background class="absolute q-ma-"></moving-background>
             <q-card-section class="q-mt-md text-center text-primary">
-              <div class="big-text text-weight-medium">Transforma</div>
+              <div class="big-text text-weight-medium">Skill Lab</div>
               <div class="q-mt-md subtitle-text animate-float-enter">Upload Resumes, Analyze Skills and Get Jobs!</div>
             </q-card-section>
             <div>
