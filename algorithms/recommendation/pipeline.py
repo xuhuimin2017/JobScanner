@@ -30,6 +30,12 @@ class PipelineBase:
     def get_job_recommendations(self, cv_text: str, top=5):
         raise NotImplementedError()
 
+    def get_job_from_skills(self, skill_list: List, top=5):
+        raise NotImplementedError()
+
+    def get_skills_from_cv(self, cv_test):
+        raise NotImplementedError()
+
 
 class Pipeline(PipelineBase):
 
@@ -76,7 +82,7 @@ class Pipeline(PipelineBase):
         return text
 
     def get_job_recommendations(self, cv_text: str, top=5) -> List[Dict]:
-        """Return jobs from CV string"""
+        """Return jobs from CV string (deprecated)"""
         if not cv_text:
             raise ValueError('CV text not valid')
 
@@ -90,6 +96,14 @@ class Pipeline(PipelineBase):
 
         jobs = [self._job_des[i] for i, j in sorted(enumerate(a), key=lambda x: x[1], reverse=True)[:top]]
         return jobs
+
+    def get_job_from_skills(self, skill_list: List, top=5):
+        # TODO
+        pass
+
+    def get_skills_from_cv(self, cv_test):
+        # TODO
+        pass
 
 
 if __name__ == '__main__':
