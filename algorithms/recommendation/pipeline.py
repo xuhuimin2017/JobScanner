@@ -96,13 +96,13 @@ if __name__ == '__main__':
     # Some quick and dirty tests
     pipe = Pipeline().load()
 
-    cv = pipe.cv_from_text('research/CV1.txt')
-    job_recommendations = pipe.get_job_recommendations(cv)
-    with open('research/Recom.json', 'w') as f:
-        json.dump(job_recommendations, f)
-    pprint(job_recommendations)
+    # cv = pipe.cv_from_text('research/CV1.txt')
+    # job_recommendations = pipe.get_job_recommendations(cv)
+    # with open('research/Recom.json', 'w') as f:
+    #     json.dump(job_recommendations, f)
+    # pprint(job_recommendations)
 
-    cv = pipe.cv_from_pdf('research/CV.pdf')
+    cv = pipe.cv_from_pdf('tests/cv1.pdf')
     job_recommendations = pipe.get_job_recommendations(cv)
     with open('research/Recom_pdf.json', 'w') as f:
         json.dump(job_recommendations, f)
