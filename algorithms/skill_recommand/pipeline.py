@@ -27,7 +27,9 @@ def find_skills(current_skill: List[str], top_n: int):
     predict = alg.NN(skill_shapes, alg.SD)
     predict = np.array(predict).reshape(-1)
 
-    res = sorted([[i, j] for i, j in zip(skill_chosen, predict)], key=lambda x: x[1], reverse=True)
+    d = dict(zip(skill_chosen, predict))
+
+    res = sorted(d.items(), key=lambda x: x[1], reverse=True)
     wage_contrib = alg.skill_contributes(current_skill, vecs)
     print('Current Skills (Contribution Weight): ', wage_contrib)
     old_wage = np.exp(float(old_wage)) * 40 * 50
