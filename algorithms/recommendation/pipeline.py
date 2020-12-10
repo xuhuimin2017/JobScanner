@@ -90,6 +90,19 @@ class Pipeline(PipelineBase):
 
         jobs = [self._job_des[i] for i, j in sorted(enumerate(a), key=lambda x: x[1], reverse=True)[:top]]
         return jobs
+    
+    def get_new_recommendations(self, skill_list, top=5) -> List[Dict]:
+
+        text = skill_list
+        print('Text len =', len(text))
+        my_skill = self._skill(list(set([i for i in text if i in self._skill_emb.keys()])))
+        extract_skills = set([i for i in text if i in self._skill_emb.keys()])  # 从简历里面提取出在技能字典的词
+        print('Extract skills:', extract_skills)
+
+        a = np.array(self._norm_skill_dimen).dot(np.array(normalize(my_skill)))  # 计算简历和所有技能的相似性
+
+        jobs = [self._job_des[i] for i, j in sorted(enumerate(a), key=lambda x: x[1], reverse=True)[:top]]
+        return jobs
 
 
 if __name__ == '__main__':
@@ -107,3 +120,10 @@ if __name__ == '__main__':
     with open('research/Recom_pdf.json', 'w') as f:
         json.dump(job_recommendations, f)
     pprint(job_recommendations)
+    
+    #skill list is the new skill list which add or delete other skills, but i do not know where to read this file
+    new_recommendations = pipe.get_new_recommendations(skill_list)
+    with open('research/New_pdf.json', 'w') as f:
+        json.dump(new_recommendations, f)
+    pprint(new_recommendations)
+
